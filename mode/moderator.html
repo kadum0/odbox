@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- leaflet cdn -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin: 0%;
+            /* overflow-y: hidden; */
+        }
+
+        body * {
+            box-sizing: border-box;
+        }
+
+        body::-webkit-scrollbar {
+            display: none;
+        }
+
+
+        #map {
+            height: 70vh;
+            width: 70vw;
+            margin-left: 1rem;
+        }
+
+        .btn {
+            position: absolute;
+            top: 8vh;
+            right: 32vw;
+            z-index: 5;
+            font-size: 1.4rem;
+        }
+
+        #addLocation {
+            right: 26vw;
+        }
+
+        #send {}
+
+        /*  */
+        .profile {
+            background: red;
+            height: 100%;
+            width: 24%;
+            align-self: flex-end;
+            justify-self: end;
+
+        }
+
+        .main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: green;
+
+            text-align: center;
+            /* overflow: default; */
+            /* overflow-x: hidden; */
+        }
+
+        .title {
+            border: 2px solid black;
+            padding: 1rem 0;
+            margin: 0%;
+        }
+
+        .mainImg {
+            height: 6rem;
+            width: 80%;
+            /* background: url("./dewang-gupta-ESEnXckWlLY-unsplash.jpg"); */
+            background: url("https://lh3.googleusercontent.com/U351oOMKLM3mRkQcmL_dl2ERG-_OrOklpwMfO_f8R_IQv1jfaMUM6bp-w439O5kf0K-y3_LtMgBZd9695Wg8o_Y1OfIyRMyxubgB1XbIi5u0fpv8f3GQVukPwle19uGUSUnq71vUngJHDRfqCFzOBgl3wVdIdjW8HvcZ_r0PMjGEZeR7D6d-MidOuTQPNEM_PNaXdHw4uuEu3p9zuYxclQgqvqPbl49InN7frUCpFhprdFaUF2xItRiLPdIiGNyjsym3VFPFSQYUkZw-ctntgUmf2ubtSkXQZ9s9GLta4Lu64E2ZAKWNTuYL_3NGX_SpsrBULvMXhC0NR2v7CkB3vBfpJ_VNVK_mpz2w_Je0fdrFMvsTdKhPzFzM2kSYSIQp-Dcp3ORyeuxHZxPw6fSUmGKL_j3FRpgWUU1BWypohXzqYgjfAG5f6xlGLvR1gk3IF2bMMN9p8ZfzcOGfq6ogykYBZzjhECmqHFT1P0Rh1mU4YXBplXYqLLroqbr-SUDR8MDuSaGUwVnvya2kOPzK3jmzn8kM15SsyMfN7VQ8z_vfATYbhluzbFOFe56oyPpGZTgbxx6HcqYsSyKd0Ze_mbjaZkVdpNTni0oOwtui8jL8C7SWMuy1o8_2Ud1WD2Bd-iLbnWZ__ochAto6uq9qTxsfxmia70rIfRN28rl7OVlFa4pa0WwSH8SGQbQtbqTeCyAWrMiC41sCTSFUz3haj2YPOvn2rq_p2CgcSC6U-PqlhzqCHQs_CtjiBVuQEcO1wXw3DULq28NtdTbesrYTO1mvkrMIVa3xzpVJCYg4gk-IOCPCIhEHuOtZe7TZ0RbPB_FDkM-T0rv5ilkKmPZICAhtkJKM68Z912nCMg7DI7afXELJBl66M7SeipAPez8KyP9EIcpp1ahNs13CaxWODHf98sPvC-NmG9X7YXFiKCiJSkLOR-udx0dHia7qiz5CIJdj5w3bTw9QFe6z2QCxyGLF-pX8_tWU5mXRh68lzuMEBIfedw=s629-no?authuser=2");
+            /* background: green; */
+            z-index: 2;
+            background-position: center center;
+            text-align: center;
+        }
+
+        .log {
+            /* display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; */
+            box-sizing: border-box;
+            overflow-y: scroll;
+            background: blue;
+            padding-top: 3rem;
+            height: 75%;
+            /* gap: .5rem; */
+        }
+
+
+
+        .per {
+            /* height: 10rem; */
+            width: 95%;
+            background: rgb(86, 86, 255);
+            background: white;
+            text-align: center;
+            border-radius: 1rem;
+            box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+            padding: .3rem;
+            margin: .3rem auto;
+            /* box-sizing: border-box; */
+        }
+
+        .imgs {}
+
+        .contr-imgs {
+            background: rgb(58, 255, 101);
+        }
+
+        .befaft-imgs {
+            background: rgb(144, 221, 161);
+        }
+
+        img {
+            height: 5rem;
+            width: 5rem;
+            background: url("https://lh3.googleusercontent.com/U351oOMKLM3mRkQcmL_dl2ERG-_OrOklpwMfO_f8R_IQv1jfaMUM6bp-w439O5kf0K-y3_LtMgBZd9695Wg8o_Y1OfIyRMyxubgB1XbIi5u0fpv8f3GQVukPwle19uGUSUnq71vUngJHDRfqCFzOBgl3wVdIdjW8HvcZ_r0PMjGEZeR7D6d-MidOuTQPNEM_PNaXdHw4uuEu3p9zuYxclQgqvqPbl49InN7frUCpFhprdFaUF2xItRiLPdIiGNyjsym3VFPFSQYUkZw-ctntgUmf2ubtSkXQZ9s9GLta4Lu64E2ZAKWNTuYL_3NGX_SpsrBULvMXhC0NR2v7CkB3vBfpJ_VNVK_mpz2w_Je0fdrFMvsTdKhPzFzM2kSYSIQp-Dcp3ORyeuxHZxPw6fSUmGKL_j3FRpgWUU1BWypohXzqYgjfAG5f6xlGLvR1gk3IF2bMMN9p8ZfzcOGfq6ogykYBZzjhECmqHFT1P0Rh1mU4YXBplXYqLLroqbr-SUDR8MDuSaGUwVnvya2kOPzK3jmzn8kM15SsyMfN7VQ8z_vfATYbhluzbFOFe56oyPpGZTgbxx6HcqYsSyKd0Ze_mbjaZkVdpNTni0oOwtui8jL8C7SWMuy1o8_2Ud1WD2Bd-iLbnWZ__ochAto6uq9qTxsfxmia70rIfRN28rl7OVlFa4pa0WwSH8SGQbQtbqTeCyAWrMiC41sCTSFUz3haj2YPOvn2rq_p2CgcSC6U-PqlhzqCHQs_CtjiBVuQEcO1wXw3DULq28NtdTbesrYTO1mvkrMIVa3xzpVJCYg4gk-IOCPCIhEHuOtZe7TZ0RbPB_FDkM-T0rv5ilkKmPZICAhtkJKM68Z912nCMg7DI7afXELJBl66M7SeipAPez8KyP9EIcpp1ahNs13CaxWODHf98sPvC-NmG9X7YXFiKCiJSkLOR-udx0dHia7qiz5CIJdj5w3bTw9QFe6z2QCxyGLF-pX8_tWU5mXRh68lzuMEBIfedw=s629-no?authuser=2");
+            background-size: contain;
+        }
+
+        .date {
+            color: rgb(49, 49, 49);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .info {}
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <button id="addLocation" class="btn">اضافة</button>
+    <button id="send" class="btn"> ارسال</button>
+
+
+    <!-- profile -->
+    <div class="profile">
+        <!-- <title> العنوان اي اسم الجامع </title> -->
+        <div class="main">
+            <h2 class="title">عنوان (اسم الجامع)</h2>
+            <div class="mainImg"></div>
+        </div>
+        <div class="log">
+            <div class="per">
+                <div class="imgs">
+                    <div class="contr-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+                    <div class="befaft-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+                </div>
+                <div class="date">22.5.2022</div>
+                <div class="info">Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit, natus.</div>
+            </div>
+            <div class="per">
+                <div class="imgs">
+                    <div class="contr-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+                    <div class="befaft-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+                </div>
+                <div class="date">22.5.2022</div>
+                <div class="info">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores saepe omnis et
+                    doloremque ab officiis nemo placeat. Libero officiis atque quos reprehenderit!</div>
+            </div>
+            <div class="per">
+                <div class="imgs">
+                    <div class="contr-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+                    <div class="befaft-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+                </div>
+                <div class="date">22.5.2022</div>
+                <div class="info">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic facere debitis aliquam
+                    voluptate, id nulla harum excepturi sed illo dolore, voluptatem non!</div>
+            </div>
+            <div class="per">
+                <div class="imgs">
+                    <div class="contr-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+                    <div class="befaft-imgs">
+                        <img alt="">
+                        <img alt="">
+                    </div>
+
+                </div>
+                <div class="date">22.5.2022</div>
+                <div class="info">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic facere debitis aliquam
+                    voluptate, id nulla harum excepturi sed illo dolore, voluptatem non!</div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- main script  -->
+    <script>
+        ////setting up 
+
+        const map = L.map('map').setView([33.396600, 44.356579], 13); //leaflet basic map
+        //tile layer
+        const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: apiKey
+        }).addTo(map);
+
+
+        // stored data 
+        //created objects data 
+        let currentObject
+        let tripleList = []
+
+
+        ////set icons 
+        let oldIcon = L.icon({
+            iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+            shadowSize: [50, 64], // size of the shadow
+            shadowAnchor: [4, 62], // the same for the shadow
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+        });
+
+
+        ////getting icon; icon is special object not just an image
+        markerIcon = L.icon({
+            // iconUrl: "https://raw.githubusercontent.com/coryasilva/Leaflet.ExtraMarkers/5722ba945cdb20574f980578184d66e50b0d1def/src/assets/svg/marker-square.svg",
+            // iconUrl: "https://www.outsystems.com/Forge_CW/_image.aspx/Q8LvY--6WakOw9afDCuuGTjk4-6ltZ-2K-UfF37ufe0=/leafletjs-reactive-1900-01-01%2000-00-00",
+            iconUrl: "https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-2x-red.png?raw=true",
+            shadowSize: [50, 64], // size of the shadow
+            shadowAnchor: [4, 62], // the same for the shadow
+            // iconSize: [125, 141],
+            // iconAnchor: [61, 141],
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+        });
+
+
+        //get data and deploy them
+
+        window.onload = async () => {
+            ///fetching data; 
+            let data = await fetch("/confirmed")
+            let rdata = await data.json()
+            console.log("get routes; ")
+            console.log(rdata)
+
+            ///deploy them; store
+            Object.values(rdata.map(e => e.path)).forEach(e => {
+
+                let label = L.marker(e.coords).addTo(map)
+
+                let mainImg = document.createElement("div")
+                // mainImg.
+                // let log
+
+                tripleList.push([label, log, e._id])
+
+
+                if (e.length != 1) { ////routes part
+                    let pathob = L.polyline(e, {
+                        color: "red",
+                    }).addTo(map)
+                    // oldObjects.push(pathId) //dont need old objects
+                    pathob.addEventListener("click", (e) => console.log(e.target))
+                } else { ////labels part 
+                    let label = L.circle(e.path, {
+                        fillColor: '#3388FF',
+                        fillOpacity: 0.8,
+                        radius: 100
+                    }).addTo(map)
+                }
+            })
+        }
+
+
+
+
+
+        /////// features 
+        //adding 
+
+
+        let addmode = document.querySelector("#add-mode")
+        addmode.addEventListener("click", () => {
+            addmode.classList.toggle("on")
+
+            if (addmode.classList.contains("on")) {
+                addmode.style.background = "red"
+            } else {
+                addmode.style.background = "green"
+                // console.log(path)
+                // pathObjects.push(currentPath)
+                // ps.push(path)
+                // path = []
+                // currentPath = 0
+                // map.removeEventListener("click")
+            }
+        })
+
+        map.addEventListener('click', function (ev) {
+            if (addmode.classList.contains("on")) {
+                let latlng = map.mouseEventToLatLng(ev.originalEvent);
+                let i = [latlng.lat, latlng.lng]
+                let m = L.marker(i, {
+                    icon: oldIcon
+                }).addTo(map);
+                mobject.push(m)
+
+                ////marker 
+                m.addEventListener("click", (e) => {
+                    // console.log(e)
+                    mobject.forEach(ee => {
+                        ee.setIcon(oldIcon)
+                    })
+                    e.target.setIcon(markerIcon)
+                    currentLabel = e.target._latlng
+                    console.log(currentLabel)
+                })
+                ////containers reset 
+                path.push(i)
+                currentPath != 0 ? map.removeLayer(currentPath) : null
+                currentPath = L.polyline(path).addTo(map)
+            }
+        });
+
+
+
+        //// adding label; 
+
+        let addCircle = document.querySelector("#addLocation")
+        addCircle.onclick = () => {
+            // map.marker(currentLabel)
+
+            console.log("addcircle to" + currentLabel)
+            let m = L.circle(currentLabel, {
+                // color: 'red',
+                fillColor: '#3388FF',
+                fillOpacity: 0.8,
+                radius: 100
+            }).addTo(map)
+
+            labelList.push([currentLabel.lat, currentLabel.lng])
+            ps.push([currentLabel.lat, currentLabel.lng])
+            pathObjects.push(m)
+        }
+
+
+        //canceling
+
+        //cancel step
+        let cancelStep = document.querySelector("#cancel-step")
+        cancelStep.addEventListener("click", () => {
+
+        })
+
+
+        ///////sending 
+        let send = document.querySelector("#send")
+        send.addEventListener("click", () => {
+
+            // console.log()
+
+
+            // fetch("/unconfirmed", {
+            //     method: "POST",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(labelList)
+            // })
+            // labelList = []
+
+        })
+
+
+
+        //////////// test code; 
+        window.onclick = () => {}
+    </script>
+
+
+</body>
+
+</html>
