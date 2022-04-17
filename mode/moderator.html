@@ -19,6 +19,7 @@
         body {
             height: 100vh;
             display: flex;
+            /* flex-direction: column; */
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
@@ -34,35 +35,53 @@
             display: none;
         }
 
+        .one {
+            background: green;
+            display: flex;
+            flex-direction: column;
+        }
 
         #map {
             height: 70vh;
+            /* height: 100%; */
             width: 70vw;
+            /* width: 100%; */
             margin-left: 1rem;
         }
 
-        .btn {
-            position: absolute;
-            top: 8vh;
-            right: 32vw;
-            z-index: 5;
-            font-size: 1.4rem;
+
+        /* add loc  */
+        .inputData {
+            background: yellow;
+            display: flex;
+
         }
 
         #addLocation {
+            /* position: absolute; */
+            top: 2rem;
             right: 26vw;
         }
 
         #send {}
 
-        /*  */
+        /* add per */
+
+        .addLocBtns {
+            background: black;
+        }
+
+        .addPerBtns {
+            background: blue;
+        }
+
+        /* profile */
         .profile {
             background: red;
             height: 100%;
             width: 24%;
             align-self: flex-end;
             justify-self: end;
-
         }
 
         .main {
@@ -87,7 +106,7 @@
             height: 6rem;
             width: 80%;
             /* background: url("./dewang-gupta-ESEnXckWlLY-unsplash.jpg"); */
-            background: url("https://lh3.googleusercontent.com/U351oOMKLM3mRkQcmL_dl2ERG-_OrOklpwMfO_f8R_IQv1jfaMUM6bp-w439O5kf0K-y3_LtMgBZd9695Wg8o_Y1OfIyRMyxubgB1XbIi5u0fpv8f3GQVukPwle19uGUSUnq71vUngJHDRfqCFzOBgl3wVdIdjW8HvcZ_r0PMjGEZeR7D6d-MidOuTQPNEM_PNaXdHw4uuEu3p9zuYxclQgqvqPbl49InN7frUCpFhprdFaUF2xItRiLPdIiGNyjsym3VFPFSQYUkZw-ctntgUmf2ubtSkXQZ9s9GLta4Lu64E2ZAKWNTuYL_3NGX_SpsrBULvMXhC0NR2v7CkB3vBfpJ_VNVK_mpz2w_Je0fdrFMvsTdKhPzFzM2kSYSIQp-Dcp3ORyeuxHZxPw6fSUmGKL_j3FRpgWUU1BWypohXzqYgjfAG5f6xlGLvR1gk3IF2bMMN9p8ZfzcOGfq6ogykYBZzjhECmqHFT1P0Rh1mU4YXBplXYqLLroqbr-SUDR8MDuSaGUwVnvya2kOPzK3jmzn8kM15SsyMfN7VQ8z_vfATYbhluzbFOFe56oyPpGZTgbxx6HcqYsSyKd0Ze_mbjaZkVdpNTni0oOwtui8jL8C7SWMuy1o8_2Ud1WD2Bd-iLbnWZ__ochAto6uq9qTxsfxmia70rIfRN28rl7OVlFa4pa0WwSH8SGQbQtbqTeCyAWrMiC41sCTSFUz3haj2YPOvn2rq_p2CgcSC6U-PqlhzqCHQs_CtjiBVuQEcO1wXw3DULq28NtdTbesrYTO1mvkrMIVa3xzpVJCYg4gk-IOCPCIhEHuOtZe7TZ0RbPB_FDkM-T0rv5ilkKmPZICAhtkJKM68Z912nCMg7DI7afXELJBl66M7SeipAPez8KyP9EIcpp1ahNs13CaxWODHf98sPvC-NmG9X7YXFiKCiJSkLOR-udx0dHia7qiz5CIJdj5w3bTw9QFe6z2QCxyGLF-pX8_tWU5mXRh68lzuMEBIfedw=s629-no?authuser=2");
+            background: url("https://i.stack.imgur.com/dzokh.jpg?s=64&g=1");
             /* background: green; */
             z-index: 2;
             background-position: center center;
@@ -106,8 +125,6 @@
             height: 75%;
             /* gap: .5rem; */
         }
-
-
 
         .per {
             /* height: 10rem; */
@@ -132,10 +149,11 @@
             background: rgb(144, 221, 161);
         }
 
+
         img {
             height: 5rem;
             width: 5rem;
-            background: url("https://lh3.googleusercontent.com/U351oOMKLM3mRkQcmL_dl2ERG-_OrOklpwMfO_f8R_IQv1jfaMUM6bp-w439O5kf0K-y3_LtMgBZd9695Wg8o_Y1OfIyRMyxubgB1XbIi5u0fpv8f3GQVukPwle19uGUSUnq71vUngJHDRfqCFzOBgl3wVdIdjW8HvcZ_r0PMjGEZeR7D6d-MidOuTQPNEM_PNaXdHw4uuEu3p9zuYxclQgqvqPbl49InN7frUCpFhprdFaUF2xItRiLPdIiGNyjsym3VFPFSQYUkZw-ctntgUmf2ubtSkXQZ9s9GLta4Lu64E2ZAKWNTuYL_3NGX_SpsrBULvMXhC0NR2v7CkB3vBfpJ_VNVK_mpz2w_Je0fdrFMvsTdKhPzFzM2kSYSIQp-Dcp3ORyeuxHZxPw6fSUmGKL_j3FRpgWUU1BWypohXzqYgjfAG5f6xlGLvR1gk3IF2bMMN9p8ZfzcOGfq6ogykYBZzjhECmqHFT1P0Rh1mU4YXBplXYqLLroqbr-SUDR8MDuSaGUwVnvya2kOPzK3jmzn8kM15SsyMfN7VQ8z_vfATYbhluzbFOFe56oyPpGZTgbxx6HcqYsSyKd0Ze_mbjaZkVdpNTni0oOwtui8jL8C7SWMuy1o8_2Ud1WD2Bd-iLbnWZ__ochAto6uq9qTxsfxmia70rIfRN28rl7OVlFa4pa0WwSH8SGQbQtbqTeCyAWrMiC41sCTSFUz3haj2YPOvn2rq_p2CgcSC6U-PqlhzqCHQs_CtjiBVuQEcO1wXw3DULq28NtdTbesrYTO1mvkrMIVa3xzpVJCYg4gk-IOCPCIhEHuOtZe7TZ0RbPB_FDkM-T0rv5ilkKmPZICAhtkJKM68Z912nCMg7DI7afXELJBl66M7SeipAPez8KyP9EIcpp1ahNs13CaxWODHf98sPvC-NmG9X7YXFiKCiJSkLOR-udx0dHia7qiz5CIJdj5w3bTw9QFe6z2QCxyGLF-pX8_tWU5mXRh68lzuMEBIfedw=s629-no?authuser=2");
+            background: url("https://i.stack.imgur.com/dzokh.jpg?s=64&g=1");
             background-size: contain;
         }
 
@@ -149,9 +167,51 @@
 </head>
 
 <body>
-    <div id="map"></div>
-    <button id="addLocation" class="btn">اضافة</button>
-    <button id="send" class="btn"> ارسال</button>
+
+    <div class="one">
+        <button id="try">trying button</button>
+        <div class="inputData">
+            <!-- per -->
+            <div class="addPerBtns">
+                <input type="file" name="before">
+                <input type="file" name="after">
+                <input type="file" name="conts">
+                <input type="text" name="" placeholder="info">
+                <input type="" name="sendPer">
+            </div>
+            <!-- loc -->
+            <div class="addLocBtns">
+                <button id="addLocation" class="btn">اضافة موقع</button>
+                <!--  -->
+
+                <form action="upl" method="POST" enctype="multipart/form-data">
+                    <input type="file" id="mainImage" name="main">
+                    <input type="submit" placeholder="sub">
+                    <!-- <button></button> -->
+                </form>
+
+                <input type="text" name="locationTitle" id="locationTitle">
+                <button type="" name="sendLoc" id="send" class="btn"> ارسال</button>
+            </div>
+
+            <!--  -->
+            <!-- <p><input type="file" accept="image/*" name="image" id="file" onchange="loadFile(event)"
+                    style="display: none;"></p>
+            <p><label for="file" style="cursor: pointer;">Upload Image</label></p>
+            <p><img id="output" width="200" /></p> -->
+            <!--  -->
+
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <!-- <button id="addImage-after"></button> -->
+    <!-- image uploading by js  -->
+    <!-- image uploading; by form  -->
+    <!-- <form action="upl" method="POST" enctype="multipart/form-data">
+        <input type="file" name="inputTageName">
+        <input type="submit">
+    </form> -->
 
 
     <!-- profile -->
@@ -227,11 +287,30 @@
         </div>
     </div>
 
+
+    <!-- image sending script -->
+    <script>
+        let titl = document.querySelector("locationTitle")
+
+        let trbtn = document.querySelector("#send")
+
+        trbtn.onclick = () => {
+            console.log(titl.textContent)
+        }
+
+        // trbtn.addEventListener("click", async ()=>{
+        //     let d = fetch("/upl", {
+        //         method:"POST",
+        //         body: titl.textContent
+        //     })
+        // })
+    </script>
+
     <!-- main script  -->
     <script>
         ////setting up 
 
-        const map = L.map('map').setView([33.396600, 44.356579], 13); //leaflet basic map
+        const map = L.map('map').setView([36.238708, 42.496588], 13); //leaflet basic map
         //tile layer
         const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
 
@@ -247,7 +326,8 @@
         // stored data 
         //created objects data 
         let currentObject
-        let tripleList = []
+        let tripleList = [] //[locaiton], title, img
+        let per /// to add to log field at the intended document 
 
 
         ////set icons 
@@ -272,6 +352,22 @@
             iconSize: [25, 41],
             iconAnchor: [12, 41],
         });
+
+
+        let loadFile = function (event) {
+            let image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+            fetch("/upl", {
+                method: "POST",
+                // headers: {
+                //     'Content-Type': 'multipart/form-data',
+                //     "boundary": "MyBoundary"
+                // },
+                // enctype: "mulitpart/"
+                // enctype: "multipart/form-data",
+                body: event.target.files[0]
+            })
+        };
 
 
         //get data and deploy them
