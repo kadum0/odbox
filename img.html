@@ -7,10 +7,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 
+    <!-- leaflet cdn -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
     <style>
         img {
             height: 4rem;
             width: 4rem;
+        }
+
+        #map {
+            height: 50vh;
+            width: 50vw;
+        }
+
+        #addingCoords {
+            background: green;
+            padding: 1rem;
+        }
+
+        #profile {
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30vw;
+            background: red;
         }
     </style>
 </head>
@@ -18,53 +45,201 @@
 <body>
 
     <!-- form button method -->
-    <form action="/upl" method="POST" enctype="multipart/form-data">
+    <!-- adding loc -->
+    <form action="/locsF" method="POST" enctype="multipart/form-data">
         <input type="text" id="title" name="title">
         <input type="file" id="image" name="image">
         <input type="submit" id="send">
     </form>
 
-    <div class="imgs">
-        <img src="" alt="" id="img1">
-        <img src="" alt="">
-        <img src="" alt="">
+    <!-- adding coordinates -->
+    <button id="addingCoords">adding label</button>
+    <!-- map -->
+    <div id="map"></div>
+
+    <div id="profile">
+        <div id="main">
+            <!-- <div id="locTitle"></div>
+            <img src="" alt="" id="mainImg"> -->
+        </div>
+        <div id="log"></div>
     </div>
 
-    <!-- button method -->
-    <script>
-        // let form = document.querySelector("form")
-        // form.onsubmit = () => {
-        //     return false
-        // }
 
+
+    <script>
+        ///////////////////////////////////////////////////////////////////////
+        ////setting up 
+
+        const map = L.map('map').setView([36.238708, 42.496588], 13); //leaflet basic map
+        //tile layer
+        const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: apiKey
+        }).addTo(map);
+
+
+
+        ////////defining the objects
+        let oldIcon = L.icon({
+            iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+            shadowSize: [50, 64], // size of the shadow
+            shadowAnchor: [4, 62], // the same for the shadow
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+        });
+
+        ////getting icon; icon is special object not just an image
+        let markerIcon = L.icon({
+            iconUrl: "https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-2x-red.png?raw=true",
+            shadowSize: [50, 64], // size of the shadow
+            shadowAnchor: [4, 62], // the same for the shadow
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+        });
+
+
+        /////locs dom elements 
+        let profile = document.querySelector("#profile")
+        let main = document.querySelector("#main")
+        let locTitle = document.querySelector("#locTitle")
+        let mainImg = document.querySelector("#mainImg")
+
+        /////GET data 
         let title = document.querySelector("#title")
         let imgc = document.querySelector("#image")
         let img1 = document.querySelector("#img1")
 
-        window.onclick = () => {
-            console.log(title.value)
-            console.log(imgc.files)
-            // imgc.files
+
+        ////containers 
+        let tripleLinkedList = []
+        let mobject = []
+        let currentCoords ////coords 
+        let currentID
+
+
+
+
+
+        // adding coordinates; 
+
+        let addCoords = document.querySelector("#addingCoords")
+        addCoords.onclick = () => {
+            console.log("clicked on add coords button")
+            addCoords.classList.toggle("on")
+            console.log(mobject)
         }
+
+        map.addEventListener('click', function (ev) {
+            if (addCoords.classList.contains("on")) {
+                let latlng = map.mouseEventToLatLng(ev.originalEvent);
+                let i = [latlng.lat, latlng.lng]
+                let m = L.marker(i, {
+                    icon: oldIcon
+                }).addTo(map);
+                mobject.push(m)
+
+                ////object eventlistender
+                m.addEventListener("click", (e) => {
+                    // console.log(e)
+                    mobject.forEach(ee => {
+                        ee.setIcon(oldIcon)
+                    })
+                    e.target.setIcon(markerIcon)
+                    currentCoords = e.target._latlng
+                    console.log(currentCoords)
+                })
+
+                ////containers set
+                currentCoords = i
+            }
+        });
+
+
+        let perList = []
 
         ////getting data and images and insert them 
         window.onload = async () => {
-            let d = await fetch("/upl")
+            let d = await fetch("/locs")
             let pd = await d.json()
-
+            console.log("get from locs")
             console.log(pd)
 
-            img1.src = `${pd}`
+
+            /////makeing dom 
+            pd.forEach(e => {
+
+                let h = document.createElement("h2")
+                h.textContent = e.title
+                // locTitle.textContent = e.title
+                // console.log(e.path)
+                let mainIMG = document.createElement("img")
+                mainIMG.src = `${e.path}`
+
+                let labe = L.marker(e.coords).addTo(map)
+
+                /////pers making 
+                e.pers.forEach(ee => {
+
+                    perList = []
+
+                    let p = document.createElement("div")
+                    p.classList.add("per")
+                    let b = document.createElement("img")
+                    b.setAttribute.id = "before"
+                    b.src = ee.b
+                    let a = document.createElement("img")
+                    a.src = ee.a
+                    a.setAttribute.id = "before"
+
+                    perList.push(p)
+                })
+
+                tripleLinkedList.push([e._id, h, mainIMG, labe, perList])
+
+                ////inserting the created dom on the template; on eventlistener 
+
+                labe.addEventListener("click", (e) => {
+
+                    console.log(tripleLinkedList)
+
+                    tripleLinkedList.forEach(tr => {
+                        if (tr[3] == e.target) {
+                            console.log(e.target)
+                            console.log(tr)
+                            // main.removeChild()
+                            main.innerHTML = ""
+                            main.append(tr[1], tr[2])
+
+                            currentID = tr[0]
+
+                            // main.append(...tr[3])    //for pers appending 
+                        }
+                    })
+                })
+            })
+
+
+
+
+
+            // img1.src = `${pd}`
 
         }
+
+
+        //////////////POST data 
 
         let send = document.querySelector("#send")
         send.addEventListener("click", (e) => {
             // e.preventDefault()
             console.log("sent")
             // console.log(title.textContent)
-
-
 
             // let d = fetch("/upl", {
             //     method: "POST",
@@ -84,6 +259,31 @@
             //     // }
             // })
         })
+
+        send.addEventListener("click", async () => {
+            let d = await fetch('locs', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    coords: currentCoords
+                })
+            });
+
+        })
+
+        ///////////////test code 
+
+        window.onclick = () => {
+            console.log(currentCoords)
+            console.log(currentID)
+            // console.log(title.value)
+            // console.log(imgc.files)
+        }
+
+
 
         /////xhr xmlhttprequest formData 
         // const btn = document.querySelector('button');

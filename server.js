@@ -7,16 +7,7 @@ let cors = require("cors")
 const path = require("path")
 const fs = require("fs")
 const multer  = require("multer") 
-
-///body parser 
 let bodyParser = require('body-parser')
-
-
-// app.post("/upl2", (req, res)=>{
-//     console.log("to upl2")
-//     console.log(req.body)
-// })
-
 
 // parse application/json
 app.use(bodyParser.json())
@@ -26,8 +17,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 //express configuration 
 // app.use(express.json())
 
-
 app.use(cors())
+
+
 
 ////////mongodb 
 //// mongo atlas
@@ -56,7 +48,6 @@ app.get("/mode", (req, res)=>{
 app.get("/img", (req, res)=>{
     res.sendFile((__dirname+"/img.html"))
     // res.sendFile("/projects/anybox/img.html")
-
 })
 
 ////// trying to send a whole folder (directory); 
@@ -64,13 +55,20 @@ app.get("/img", (req, res)=>{
 // app.use('/mode', express.static(path.join(__dirname, 'mode')))
 
 
-// app.use(express.static('public'))
-
-
-
-
 
 ////////////////////////////////routes 
+
+
+////post request; same route for both json data; currentCoords and form data; image, title,
+///get data 
+///insert them locally 
+///make an object to be sent to the db; sent coords, title, resulted path  
+
+////get request 
+///get; conts; get all docs from conts collection 
+///structure it in specific object form 
+///send it in a res 
+
 
 
 /////?? inserting 
@@ -91,6 +89,8 @@ app.get("/img", (req, res)=>{
 //     console.log(results)
 //     })
 // })
+
+
 
 /////////////multer configuring
 
@@ -139,13 +139,15 @@ const storage = multer.diskStorage({
     }
     })
 
-
-
 //////making basic plan
 const upload = multer({storage: storage})
 
 
-//image handling
+
+
+
+
+//image handling trying
 app.post("/upl", upload.any(),(req, res)=>{
     // res.json("image uploaded")
     console.log("get image")
@@ -154,8 +156,6 @@ app.post("/upl", upload.any(),(req, res)=>{
     
     console.log(JSON.parse(JSON.stringify(req.body)))
 
-
-
     // console.log(req.body.img)
     // console.log(req.body.name)
     res.json("good")
@@ -163,13 +163,70 @@ app.post("/upl", upload.any(),(req, res)=>{
 
 app.get("/upl", (req, res)=>{
     // res.json(dir+"/mainImg.png")
-    res.json(`/locs;imgs/${dirna}/mainImg.png`)
+    res.json(`/locs;imgs/${dirna}/mainImg.png`)  ///basic sending image formula
     // res.send(dir+"/mainImg.png")
     console.log(dir+"/mainImg.png")
 })
 
 
+
+
+
+//////new plan 
+
+let it ={}
+// let ii 
+
+app.post("/locs", (req, res)=>{
+    console.log(req.body)
+    it.coords = req.body.coords
+})
+
+
+app.post("/locsF", upload.any() ,(req, res)=>{
+    // console.log(req.body)
+    it.title = req.body.title
+    it.path = `/locs;imgs/${dirna}/mainImg.png`
+    it.pers = []
+
+    console.log(it)
+
+    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+        let dbb = client.db()
+    
+        dbb.collection("locs").insertOne(it)
+        // let results = await dbb.collection("locs").find()
+        // let results = await dbb.collection("locs").find().toArray()
+    
+        // res.send(results)
+        // console.log(results)
+        })
+
+    res.json("nice")
+})
+
+
+
+app.get("/locs", (req, res)=>{
+    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+        let dbb = client.db()
+    
+        // dbb.collection("locs").insertOne(it)
+        // let results = await dbb.collection("locs").find()
+        let results = await dbb.collection("locs").find().toArray()
+    
+        res.send(results)
+        // console.log(results)
+        })
+
+})
+
+
 /////making the main object to send for; locs
+
+
+
+
 
 
 
