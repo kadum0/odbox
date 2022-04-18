@@ -111,6 +111,7 @@ app.get("/img", (req, res)=>{
 
 
 let dir 
+let dirna 
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -118,6 +119,7 @@ const storage = multer.diskStorage({
     // console.log(JSON.parse(JSON.stringify(req.body)))
     // let dir = `./locs; imgs/${req.body.title}`
     dir = `./public/locs;imgs/${req.body.title}`
+    dirna = req.body.title
 
     fs.exists(dir, exist => {
     if (!exist) {
@@ -160,10 +162,15 @@ app.post("/upl", upload.any(),(req, res)=>{
 })
 
 app.get("/upl", (req, res)=>{
-    // res.json()
-    // res.send()
+    // res.json(dir+"/mainImg.png")
+    res.json(`/locs;imgs/${dirna}/mainImg.png`)
+    // res.send(dir+"/mainImg.png")
     console.log(dir+"/mainImg.png")
 })
+
+
+/////making the main object to send for; locs
+
 
 
 ///////establishing
