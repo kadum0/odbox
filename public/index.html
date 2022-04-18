@@ -59,13 +59,12 @@
 <body>
     <div id="map"></div>
     <div class="btns">
-        <button id="add-mode">اضافة</button>
-        <!-- <div class="deletebtns">
-            <button id="cancel-step">الغاء الخطوة</button>
-            <button id="cancel-route">الغاء المسار</button>
-            <button id="cancel-all">الغاء الجميع</button>
-        </div> -->
-        <!-- <button id="add-circle">اضافة رأس</button> -->
+        <!-- <button id="add-mode">اضافة</button> -->
+        <!-- <input type="file" value="اضافة مشاركة"> -->
+        <div>
+            <label for="files" class="btn">اضافة مشاركة</label>
+            <input id="files" type="file" style="opacity: .4;">
+        </div>
         <button id="send"> ارسال</button>
 
     </div>
@@ -88,20 +87,8 @@
 
 
         // stored data 
-        //created objects data 
-        let mobject = [] /// list of the labels object
-        let pathObjects = [] ///no need
-        let oldObjects = [] ///no need
-
-        //path 
-        let points = [] //no need
-        let path = [] ///path points
-        let currentPath = [] //path object
-        let ps = []
-
-        //circles
-        let currentLabel
-        let labelList = [] ////
+        ////current ID
+        let currentID
 
 
         ////set icons 
@@ -116,19 +103,21 @@
 
         ////getting icon; icon is special object not just an image
         markerIcon = L.icon({
-            // iconUrl: "https://raw.githubusercontent.com/coryasilva/Leaflet.ExtraMarkers/5722ba945cdb20574f980578184d66e50b0d1def/src/assets/svg/marker-square.svg",
-            // iconUrl: "https://www.outsystems.com/Forge_CW/_image.aspx/Q8LvY--6WakOw9afDCuuGTjk4-6ltZ-2K-UfF37ufe0=/leafletjs-reactive-1900-01-01%2000-00-00",
             iconUrl: "https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-2x-red.png?raw=true",
             shadowSize: [50, 64], // size of the shadow
             shadowAnchor: [4, 62], // the same for the shadow
-            // iconSize: [125, 141],
-            // iconAnchor: [61, 141],
             iconSize: [25, 41],
             iconAnchor: [12, 41],
         });
 
 
+
         //get data and deploy them
+        ////triple linked list
+        //make the dom elements; labels, profile, adding a per conts panel 
+        ///addeventlistener for them; 
+        ///show the related dom element 
+        ///set the current id to the selected element id 
 
         window.onload = async () => {
             ///fetching data; 
@@ -161,172 +150,15 @@
 
 
         /////// features 
-        //adding 
 
-
-        let addmode = document.querySelector("#add-mode")
-        addmode.addEventListener("click", () => {
-            addmode.classList.toggle("on")
-
-
-            if (addmode.classList.contains("on")) {
-                addmode.style.background = "red"
-            } else {
-                addmode.style.background = "green"
-                // console.log(path)
-                pathObjects.push(currentPath)
-                ps.push(path)
-                path = []
-                currentPath = 0
-                // map.removeEventListener("click")
-            }
-        })
-
-        map.addEventListener('click', function (ev) {
-            if (addmode.classList.contains("on")) {
-                let latlng = map.mouseEventToLatLng(ev.originalEvent);
-                let i = [latlng.lat, latlng.lng]
-                let m = L.marker(i, {
-                    icon: oldIcon
-                }).addTo(map);
-                mobject.push(m)
-
-                ////marker 
-                m.addEventListener("click", (e) => {
-                    // console.log(e)
-                    mobject.forEach(ee => {
-                        ee.setIcon(oldIcon)
-                    })
-                    e.target.setIcon(markerIcon)
-                    currentLabel = e.target._latlng
-                    console.log(currentLabel)
-                })
-                ////containers reset 
-                path.push(i)
-                currentPath != 0 ? map.removeLayer(currentPath) : null
-                currentPath = L.polyline(path).addTo(map)
-            }
-        });
-
-
-
-        //// adding label; 
-
-        let addCircle = document.querySelector("#add-circle")
-        addCircle.onclick = () => {
-            // map.marker(currentLabel)
-
-            console.log("addcircle to" + currentLabel)
-            let m = L.circle(currentLabel, {
-                // color: 'red',
-                fillColor: '#3388FF',
-                fillOpacity: 0.8,
-                radius: 100
-            }).addTo(map)
-
-            labelList.push([currentLabel.lat, currentLabel.lng])
-            ps.push([currentLabel.lat, currentLabel.lng])
-            pathObjects.push(m)
-        }
-
-
-        //canceling
-
-        //cancel step
-        let cancelStep = document.querySelector("#cancel-step")
-        cancelStep.addEventListener("click", () => {
-
-            //data 
-
-            //ui 
-
-            map.removeLayer(mobject[mobject.length - 1])
-            mobject.pop()
-
-            path.pop()
-            // points.pop()
-            map.removeLayer(currentPath)
-            currentPath = L.polyline(path).addTo(map)
-
-        })
-
-
-        //cancel route
-        let cancelRoute = document.querySelector("#cancel-route")
-        cancelRoute.addEventListener("click", () => {
-
-            // console.log(pathObject)
-            //data 
-
-
-            if (currentPath == 0) {
-                map.removeLayer(currentPaths[currentPaths.length - 1])
-                currentPaths.pop()
-                ps.pop()
-
-            } else {
-                // console.log("should empty the currentPath")
-
-                map.removeLayer(currentPath)
-
-                currentPath = 0
-                path = 0
-                // console.log(pathObject)
-
-            }
-
-            // points= []
-            // path=[]
-            mobject.forEach(e => map.removeLayer(e))
-
-            //ui
-
-        })
-
-
-
-        //cancel all
-        let cancelAll = document.querySelector("#cancel-all")
-        cancelAll.addEventListener("click", () => {
-
-            //ui
-            mobject.forEach(e => map.removeLayer(e))
-            mobject = []
-            pathObjects.forEach(e => map.removeLayer(e))
-            pathObjects = []
-            ps = []
-        })
-
-
+        /////add per conts images
 
 
         ///////sending 
         let send = document.querySelector("#send")
         send.addEventListener("click", () => {
 
-            // console.log()
-
-            // fetch("/unconfirmed", {
-            //     method: "POST",
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(ps)
-            // })
-            // ps = []
-
-            // fetch("/unconfirmed", {
-            //     method: "POST",
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(labelList)
-            // })
-            // labelList = []
-
         })
-
-
 
 
 

@@ -7,26 +7,36 @@ let cors = require("cors")
 const path = require("path")
 const multer  = require("multer") 
 
+///body parser 
+let bodyParser = require('body-parser')
+
+
+// app.post("/upl2", (req, res)=>{
+//     console.log("to upl2")
+//     console.log(req.body)
+// })
+
+
+// parse application/json
+app.use(bodyParser.json())
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
 
 //express configuration 
-app.use(express.json())
+// app.use(express.json())
+
+
 app.use(cors())
 
 ////////mongodb 
 //// mongo atlas
 
-
-
-////mongodb 
 let mongodb = require("mongodb").MongoClient
 const { ObjectID } = require("bson")
 // const { markAsUntransferable } = require("worker_threads")
 // let ObjectId = require('mongodb').ObjectID;
 require("dotenv").config()
 // let mongokey = "mongodb+srv://firstUser:LdUpMsCeuguJLKAe@cluster0.mf8v4.mongodb.net/db2?retryWrites=true&w=majority"
-
-
-// const path = require('path')
 
 
 
@@ -42,6 +52,11 @@ app.get("/mode", (req, res)=>{
     res.sendFile(__dirname+"/mode/moderator.html")
 })
 
+app.get("/img", (req, res)=>{
+    res.sendFile((__dirname+"/img.html"))
+    // res.sendFile("/projects/anybox/img.html")
+
+})
 
 ////// trying to send a whole folder (directory); 
 // app.use('/mode', express.static('/mode'))
@@ -52,9 +67,9 @@ app.get("/mode", (req, res)=>{
 
 
 
-/////routes 
 
 
+////////////////////////////////routes 
 
 
 /////?? inserting 
@@ -76,42 +91,37 @@ app.get("/mode", (req, res)=>{
 //     })
 // })
 
+/////////////multer configuring
 
-app.use("/img", (req, res)=>{
-    res.sendFile((__dirname+"/img.html"))
-    // res.sendFile("/projects/anybox/img.html")
-
-})
-
-////////////////multer configuring
-
-////making storage plan
+///////making storage plan
 const storage = multer.diskStorage({
     destination: (req, file, cb)=>{
         cb(null, "./locs; imgs")
     },
     filename: (req, file, cb)=>{
-        console.log(file)
+        // console.log(file)
         cb(null, Date.now() + path.extname(file.originalname))
     }
 })
 
+
 //////making basic plan
 const upload = multer({storage: storage})
-
-
 
 
 //image handling
 app.post("/upl", upload.single("image"),(req, res)=>{
     // res.json("image uploaded")
     console.log("get image")
-
-
     console.log(req.file)
-    // console.log(req.body)
+    console.log(req.body.title)
+    
 
 
+    
+    // console.log(req.body.img)
+    // console.log(req.body.name)
+    res.json("good")
 })
 
 

@@ -14,31 +14,96 @@
 
 <body>
 
+    <!-- form button method -->
     <form action="/upl" method="POST" enctype="multipart/form-data">
         <input type="file" id="image" name="image">
+        <input type="text" id="title" name="title">
         <input type="submit" id="send">
     </form>
 
+    <!-- button method -->
     <script>
+        // let form = document.querySelector("form")
+        // form.onsubmit = () => {
+        //     return false
+        // }
+
+        let title = document.querySelector("#title")
+        let imgc = document.querySelector("#image")
+
+        window.onclick = () => {
+            console.log(title.value)
+            console.log(imgc.files)
+            // imgc.files
+        }
+
         let send = document.querySelector("#send")
-
         send.addEventListener("click", (e) => {
-
-            e.preventDefault()
-
+            // e.preventDefault()
             console.log("sent")
+            // console.log(title.textContent)
 
-            // let d = fetch("upl", {
+
+
+            // let d = fetch("/upl", {
             //     method: "POST",
             //     headers: {
-            //         'Content-Type': 'application/json'
+            //         'Content-Type': 'application/json',
+            //         // 'Content-Type': 'multipart/form-data; boundary=something'
             //     },
-            //     body: JSON.stringify("name"),
+            //     body: JSON.stringify({
+            //         name: title.value,
+            //         // img: imgc.files
+            //     }),
+
+            //     ///trying to send image via fetch
+            //     // body: imgc.files[0]
             //     // body: {
             //     //     name: "the body"
             //     // }
             // })
         })
+
+        /////xhr xmlhttprequest formData 
+        // const btn = document.querySelector('button');
+
+        // function sendData(data) {
+        //     const XHR = new XMLHttpRequest(),
+        //         FD = new FormData();
+
+        //     // Push our data into our FormData object
+        //     for (name in data) {
+        //         FD.append(name, data[name]);
+        //     }
+        //     // FD.append(imgc.files[0])
+        //     // FD.append('userpic', imgc.files[0], 'chris.jpg');
+
+
+        //     // Define what happens on successful data submission
+        //     XHR.addEventListener('load', function (event) {
+        //         alert('Yeah! Data sent and response loaded.');
+        //     });
+
+        //     // Define what happens in case of error
+        //     XHR.addEventListener(' error', function (event) {
+        //         alert('Oops! Something went wrong.');
+        //     });
+
+        //     // Set up our request
+        //     XHR.open('POST', 'upl');
+
+        //     // Send our FormData object; HTTP headers are set automatically
+        //     XHR.send(FD);
+        // }
+
+        // send.addEventListener('click', function () {
+        //     sendData({
+        //         test: 'ok',
+        //         file: imgc.files[0]
+        //     });
+        // })
+
+        /////have trouble appending on the server side to identify that this is file 
     </script>
 </body>
 

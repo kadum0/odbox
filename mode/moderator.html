@@ -287,25 +287,6 @@
         </div>
     </div>
 
-
-    <!-- image sending script -->
-    <script>
-        let titl = document.querySelector("locationTitle")
-
-        let trbtn = document.querySelector("#send")
-
-        trbtn.onclick = () => {
-            console.log(titl.textContent)
-        }
-
-        // trbtn.addEventListener("click", async ()=>{
-        //     let d = fetch("/upl", {
-        //         method:"POST",
-        //         body: titl.textContent
-        //     })
-        // })
-    </script>
-
     <!-- main script  -->
     <script>
         ////setting up 
@@ -339,16 +320,11 @@
             iconAnchor: [12, 41],
         });
 
-
         ////getting icon; icon is special object not just an image
         markerIcon = L.icon({
-            // iconUrl: "https://raw.githubusercontent.com/coryasilva/Leaflet.ExtraMarkers/5722ba945cdb20574f980578184d66e50b0d1def/src/assets/svg/marker-square.svg",
-            // iconUrl: "https://www.outsystems.com/Forge_CW/_image.aspx/Q8LvY--6WakOw9afDCuuGTjk4-6ltZ-2K-UfF37ufe0=/leafletjs-reactive-1900-01-01%2000-00-00",
             iconUrl: "https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-2x-red.png?raw=true",
             shadowSize: [50, 64], // size of the shadow
             shadowAnchor: [4, 62], // the same for the shadow
-            // iconSize: [125, 141],
-            // iconAnchor: [61, 141],
             iconSize: [25, 41],
             iconAnchor: [12, 41],
         });
@@ -363,8 +339,6 @@
                 //     'Content-Type': 'multipart/form-data',
                 //     "boundary": "MyBoundary"
                 // },
-                // enctype: "mulitpart/"
-                // enctype: "multipart/form-data",
                 body: event.target.files[0]
             })
         };
@@ -412,8 +386,7 @@
 
 
         /////// features 
-        //adding 
-
+        //adding label
 
         let addmode = document.querySelector("#add-mode")
         addmode.addEventListener("click", () => {
@@ -423,12 +396,6 @@
                 addmode.style.background = "red"
             } else {
                 addmode.style.background = "green"
-                // console.log(path)
-                // pathObjects.push(currentPath)
-                // ps.push(path)
-                // path = []
-                // currentPath = 0
-                // map.removeEventListener("click")
             }
         })
 
@@ -443,7 +410,7 @@
 
                 ////marker 
                 m.addEventListener("click", (e) => {
-                    // console.log(e)
+                    // change label color
                     mobject.forEach(ee => {
                         ee.setIcon(oldIcon)
                     })
@@ -452,9 +419,9 @@
                     console.log(currentLabel)
                 })
                 ////containers reset 
-                path.push(i)
-                currentPath != 0 ? map.removeLayer(currentPath) : null
-                currentPath = L.polyline(path).addTo(map)
+                // path.push(i)
+                // currentPath != 0 ? map.removeLayer(currentPath) : null
+                // currentPath = L.polyline(path).addTo(map)
             }
         });
 
