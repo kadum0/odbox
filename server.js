@@ -5,6 +5,7 @@ let express = require("express")
 let app = express()
 let cors = require("cors")
 const path = require("path")
+const fs = require("fs")
 const multer  = require("multer") 
 
 ///body parser 
@@ -42,11 +43,11 @@ require("dotenv").config()
 
 
 ////////// pages to send
-// app.use(express.static("./public"))
-app.get("/", (req, res)=>{
-    res.sendFile(__dirname +"/public/index.html")
-    // res.sendFile(__dirname + "/public/map.js")
-})
+app.use(express.static("./public"))
+// app.get("/", (req, res)=>{
+//     res.sendFile(__dirname +"/public/index.html")
+//     // res.sendFile(__dirname + "/public/map.js")
+// })
 
 app.get("/mode", (req, res)=>{
     res.sendFile(__dirname+"/mode/moderator.html")
@@ -94,15 +95,48 @@ app.get("/img", (req, res)=>{
 /////////////multer configuring
 
 ///////making storage plan
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb)=>{
+//         // cb(null, "./locs; imgs")
+//         cb(null, `./locs; imgs/${req.body.title}`)
+
+//     },
+//     filename: (req, file, cb)=>{
+//         // console.log(file)
+//         cb(null, Date.now() + path.extname(file.originalname))
+//         // cb(null, "mainImg")
+
+//     }
+// })
+
+
+let dir 
+
 const storage = multer.diskStorage({
-    destination: (req, file, cb)=>{
-        cb(null, "./locs; imgs")
-    },
-    filename: (req, file, cb)=>{
-        // console.log(file)
-        cb(null, Date.now() + path.extname(file.originalname))
+    destination: (req, file, cb) => {
+    //   let userId  = req.body.title
+    // console.log(JSON.parse(JSON.stringify(req.body)))
+    // let dir = `./locs; imgs/${req.body.title}`
+    dir = `./public/locs;imgs/${req.body.title}`
+
+    fs.exists(dir, exist => {
+    if (!exist) {
+        return fs.mkdir(dir, error => cb(error, dir))
     }
-})
+    return cb(null, dir)
+    })
+
+
+    console.log(dir)
+    },
+    filename: (req, file, cb) => {
+    //   const { userId } = req.body.title
+    // cb(null, `UserId-${userId}-Image-${Date.now()}.png`)
+    cb(null, `mainImg.png`)
+    console.log(file)
+    }
+    })
+
 
 
 //////making basic plan
@@ -110,21 +144,26 @@ const upload = multer({storage: storage})
 
 
 //image handling
-app.post("/upl", upload.single("image"),(req, res)=>{
+app.post("/upl", upload.any(),(req, res)=>{
     // res.json("image uploaded")
     console.log("get image")
     console.log(req.file)
-    console.log(req.body.title)
+    console.log(req.body)
     
+    console.log(JSON.parse(JSON.stringify(req.body)))
 
 
-    
+
     // console.log(req.body.img)
     // console.log(req.body.name)
     res.json("good")
 })
 
-
+app.get("/upl", (req, res)=>{
+    // res.json()
+    // res.send()
+    console.log(dir+"/mainImg.png")
+})
 
 
 ///////establishing

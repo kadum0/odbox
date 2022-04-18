@@ -16,10 +16,16 @@
 
     <!-- form button method -->
     <form action="/upl" method="POST" enctype="multipart/form-data">
-        <input type="file" id="image" name="image">
         <input type="text" id="title" name="title">
+        <input type="file" id="image" name="image">
         <input type="submit" id="send">
     </form>
+
+    <div class="imgs">
+        <img src="" alt="">
+        <img src="" alt="">
+        <img src="" alt="">
+    </div>
 
     <!-- button method -->
     <script>
@@ -35,6 +41,15 @@
             console.log(title.value)
             console.log(imgc.files)
             // imgc.files
+        }
+
+        ////getting data and images and insert them 
+        window.onload = async () => {
+            let d = await fetch("/upl")
+            let pd = await d.json()
+
+            console.log(pd)
+
         }
 
         let send = document.querySelector("#send")
