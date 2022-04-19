@@ -16,11 +16,42 @@
         crossorigin=""></script>
 
     <style>
-        img {
-            height: 4rem;
-            width: 4rem;
+        body {
+            margin: 0%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            height: 100vh;
+            background: rgb(17, 17, 17);
+
         }
 
+        label {
+            font-size: 1.3rem;
+        }
+
+        input[type=file] {
+            opacity: .4;
+            /* background: red; */
+        }
+
+        #profile img {
+            /* height: 4rem;
+            width: 4rem; */
+            background-image: url("/locs;imgs/track/mainImg.png");
+            background-position: center;
+            /* background-size: contain; */
+            background-size: cover;
+            /* background-size: auto; */
+
+            height: 80%;
+            width: 100%;
+            /* background: red; */
+        }
+
+
+        /*  */
         #map {
             height: 50vh;
             width: 50vw;
@@ -31,39 +62,130 @@
             padding: 1rem;
         }
 
+
+        /* profile */
         #profile {
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 30vw;
-            background: red;
+            min-height: 100%;
+            width: 30%;
+            background: rgb(206, 206, 206);
+        }
+
+        /* main */
+        #main {
+            height: 24%;
+            background: rgb(230, 230, 230);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #imgCont {
+            height: 80%;
+            width: 90%;
+            overflow: hidden;
+            /* box-sizing: border-box; */
+        }
+
+        /* log */
+        #log {
+            display: flex;
+            flex-direction: column;
+            gap: .3rem;
+        }
+
+        #conts {
+            height: 20vh;
+            width: 100%;
+            background: rgb(223, 223, 223);
+            display: flex;
+            flex-direction: row;
+            gap: .4rem;
+        }
+
+        /* input fields */
+        #input {
+            display: flex;
+        }
+
+        #forms {}
+
+        form {
+            padding: 1rem;
+            background: rgb(105, 255, 105);
+            margin: 1rem;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- form button method -->
-    <!-- adding loc -->
-    <form action="/locsF" method="POST" enctype="multipart/form-data">
-        <input type="text" id="title" name="title">
-        <input type="file" id="image" name="image">
-        <input type="submit" id="send">
-    </form>
+    <div id="one">
 
-    <!-- adding coordinates -->
-    <button id="addingCoords">adding label</button>
-    <!-- map -->
-    <div id="map"></div>
+        <!-- display conts to be confirmed -->
+        <div id="conts"></div>
+        <div id="input">
 
+            <!-- map -->
+            <div id="map"></div>
+
+            <!-- form button method -->
+            <div id="forms">
+                <!-- adding loc -->
+                <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingLoc">
+                    <input type="text" id="title" name="title">
+                    <label for="loc">اضافة محطة</label>
+                    <input type="file" id="loc" name="loc">
+                    <input type="submit" id="send">
+                </form>
+
+                <!-- adding per -->
+                <form action="/perF" method="POST" enctype="multipart/form-data" id="addingPer">
+                    <input type="text" id="title" name="title">
+                    <label for="per">اضافة درة</label>
+
+                    <input type="file" id="per" name="per">
+                    <input type="submit" id="send">
+                </form>
+
+                <!-- adding conts  -->
+                <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingConts">
+                    <input type="text" id="title" name="title">
+                    <label for="cont">اضافة مشاركة</label>
+
+                    <input type="file" id="cont" name="cont">
+                    <input type="submit" id="send">
+                </form>
+            </div>
+
+        </div>
+
+        <!-- adding coordinates -->
+        <button id="addingCoords">adding label</button>
+
+    </div>
     <div id="profile">
         <div id="main">
+            <h2>the mosque name</h2>
+            <div id="imgCont">
+                <img alt="">
+
+            </div>
             <!-- <div id="locTitle"></div>
             <img src="" alt="" id="mainImg"> -->
         </div>
         <div id="log"></div>
     </div>
+
+    <!-- <div id="two">
+    </div> -->
+
+    <!-- <script> /// a try to prevent form redirecting after submitting
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script> -->
 
 
 

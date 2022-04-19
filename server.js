@@ -161,6 +161,7 @@ app.post("/upl", upload.any(),(req, res)=>{
     res.json("good")
 })
 
+
 app.get("/upl", (req, res)=>{
     // res.json(dir+"/mainImg.png")
     res.json(`/locs;imgs/${dirna}/mainImg.png`)  ///basic sending image formula
