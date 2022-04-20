@@ -20,7 +20,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cors())
 
 
-
 ////////mongodb 
 //// mongo atlas
 
@@ -110,15 +109,19 @@ app.get("/img", (req, res)=>{
 // })
 
 
-let dir 
-let dirna 
+// let dirna 
+
+
+//
 
 const storage = multer.diskStorage({
+///storage plan; dest, naming, limitaiton, error handling ??
+
     destination: (req, file, cb) => {
-    //   let userId  = req.body.title
-    // console.log(JSON.parse(JSON.stringify(req.body)))
-    // let dir = `./locs; imgs/${req.body.title}`
-    dir = `./public/locs;imgs/${req.body.title}`
+    //let userId  = req.body.title
+    //console.log(JSON.parse(JSON.stringify(req.body)))
+    //let dir = `./locs; imgs/${req.body.title}`
+    let dir = `./public/locs;imgs/${req.body.etitle}`
     dirna = req.body.title
 
     fs.exists(dir, exist => {
@@ -139,37 +142,59 @@ const storage = multer.diskStorage({
     }
     })
 
-//////making basic plan
 const upload = multer({storage: storage})
 
 
 
 
+//////making second plan 
+let storage2 =multer.diskStorage({
+    destination: (req, file, cb)=>{
+
+        console.log(req.body)
+        console.log(file)
+        // let trimmed = req.body.etitle.trim()
+        let dir = `./public/locs;imgs/${req.body.etitle}`
+        fs.exists(dir, exist => {
+            if (!exist) {
+                return fs.mkdir(dir, error => cb(error, dir))
+            }
+            return cb(null, dir)
+            })
+        
+
+    }, 
+    filename: (req, file, cb)=>{
+        cb(null, "mainImg.png")
+    }
+})
+
+let upload2 = multer({storage: storage2})
+
+
 
 
 //image handling trying
-app.post("/upl", upload.any(),(req, res)=>{
-    // res.json("image uploaded")
-    console.log("get image")
-    console.log(req.file)
-    console.log(req.body)
+// app.post("/upl", upload.any(),(req, res)=>{
+//     // res.json("image uploaded")
+//     console.log("get image")
+//     console.log(req.file)
+//     console.log(req.body)
     
-    console.log(JSON.parse(JSON.stringify(req.body)))
+//     console.log(JSON.parse(JSON.stringify(req.body)))
 
-    // console.log(req.body.img)
-    // console.log(req.body.name)
-    res.json("good")
-})
-
-
-app.get("/upl", (req, res)=>{
-    // res.json(dir+"/mainImg.png")
-    res.json(`/locs;imgs/${dirna}/mainImg.png`)  ///basic sending image formula
-    // res.send(dir+"/mainImg.png")
-    console.log(dir+"/mainImg.png")
-})
+//     // console.log(req.body.img)
+//     // console.log(req.body.name)
+//     res.json("good")
+// })
 
 
+// app.get("/upl", (req, res)=>{
+//     // res.json(dir+"/mainImg.png")
+//     res.json(`/locs;imgs/${dirna}/mainImg.png`)  ///basic sending image formula
+//     // res.send(dir+"/mainImg.png")
+//     console.log(dir+"/mainImg.png")
+// })
 
 
 
@@ -178,33 +203,53 @@ app.get("/upl", (req, res)=>{
 let it ={}
 // let ii 
 
-app.post("/locs", (req, res)=>{
+//////locs 
+app.post("/locs",upload2.any() , (req, res)=>{
     console.log(req.body)
-    it.coords = req.body.coords
-})
+    // it.coords = req.body.coords
 
 
-app.post("/locsF", upload.any() ,(req, res)=>{
-    // console.log(req.body)
+    ////////////
     it.title = req.body.title
-    it.path = `/locs;imgs/${dirna}/mainImg.png`
-    it.pers = []
+    it.path = `/locs;imgs/${req.body.etitle}/mainImg.png`
+    it.coords = req.body.coords.split(",")
+
+    // it.coords = req.body.coords
+    // it.pers = []
 
     console.log(it)
 
     mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-        let dbb = client.db()
-    
+        let dbb = client.db()    
         dbb.collection("locs").insertOne(it)
-        // let results = await dbb.collection("locs").find()
-        // let results = await dbb.collection("locs").find().toArray()
-    
-        // res.send(results)
-        // console.log(results)
         })
 
-    res.json("nice")
 })
+
+
+
+/////old post; form tag method; 
+// app.post("/locsF", upload.any() ,(req, res)=>{
+//     // console.log(req.body)
+//     it.title = req.body.title
+//     it.path = `/locs;imgs/${req.body.etitle}/mainImg.png`
+//     // it.pers = []
+
+//     console.log(it)
+
+//     mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+//         let dbb = client.db()
+    
+//         dbb.collection("locs").insertOne(it)
+//         // let results = await dbb.collection("locs").find()
+//         // let results = await dbb.collection("locs").find().toArray()
+    
+//         // res.send(results)
+//         // console.log(results)
+//         })
+
+//     res.json("nice")
+// })
 
 
 
@@ -233,6 +278,4 @@ app.get("/locs", (req, res)=>{
 
 ///////establishing
 app.listen(process.env.PORT || 3442, ()=>console.log("listennig ..."))
-
-
 
