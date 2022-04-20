@@ -114,37 +114,34 @@ app.get("/img", (req, res)=>{
 
 //
 
-const storage = multer.diskStorage({
-///storage plan; dest, naming, limitaiton, error handling ??
+// const storage = multer.diskStorage({
+// ///storage plan; dest, naming, limitaiton, error handling ??
 
-    destination: (req, file, cb) => {
-    //let userId  = req.body.title
-    //console.log(JSON.parse(JSON.stringify(req.body)))
-    //let dir = `./locs; imgs/${req.body.title}`
-    let dir = `./public/locs;imgs/${req.body.etitle}`
-    dirna = req.body.title
+//     destination: (req, file, cb) => {
+//     //let userId  = req.body.title
+//     //console.log(JSON.parse(JSON.stringify(req.body)))
+//     //let dir = `./locs; imgs/${req.body.title}`
+//     let dir = `./public/locs;imgs/${req.body.etitle}`
+//     dirna = req.body.title
 
-    fs.exists(dir, exist => {
-    if (!exist) {
-        return fs.mkdir(dir, error => cb(error, dir))
-    }
-    return cb(null, dir)
-    })
+//     fs.exists(dir, exist => {
+//     if (!exist) {
+//         return fs.mkdir(dir, error => cb(error, dir))
+//     }
+//     return cb(null, dir)
+//     })
 
+//     console.log(dir)
+//     },
+//     filename: (req, file, cb) => {
+//     //   const { userId } = req.body.title
+//     // cb(null, `UserId-${userId}-Image-${Date.now()}.png`)
+//     cb(null, `mainImg.png`)
+//     console.log(file)
+//     }
+//     })
 
-    console.log(dir)
-    },
-    filename: (req, file, cb) => {
-    //   const { userId } = req.body.title
-    // cb(null, `UserId-${userId}-Image-${Date.now()}.png`)
-    cb(null, `mainImg.png`)
-    console.log(file)
-    }
-    })
-
-const upload = multer({storage: storage})
-
-
+// const upload = multer({storage: storage})
 
 
 //////making second plan 
@@ -161,7 +158,6 @@ let storage2 =multer.diskStorage({
             }
             return cb(null, dir)
             })
-        
 
     }, 
     filename: (req, file, cb)=>{
@@ -200,18 +196,21 @@ let upload2 = multer({storage: storage2})
 
 //////new plan 
 
-let it ={}
 // let ii 
+let it ={}
+
 
 //////locs 
-app.post("/locs",upload2.any() , (req, res)=>{
-    console.log(req.body)
+app.post("/locs", upload2.any(), (req, res)=>{
+    console.log( typeof req.body.coords)
     // it.coords = req.body.coords
 
+// console.log(req.body)
 
     ////////////
     it.title = req.body.title
     it.path = `/locs;imgs/${req.body.etitle}/mainImg.png`
+    // it.coords = req.body.coords.split(",")
     it.coords = req.body.coords.split(",")
 
     // it.coords = req.body.coords
@@ -219,10 +218,19 @@ app.post("/locs",upload2.any() , (req, res)=>{
 
     console.log(it)
 
-    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-        let dbb = client.db()    
-        dbb.collection("locs").insertOne(it)
-        })
+    it={}
+
+
+    // it.title = undefined
+    // it.coords = undefined
+    // it.path = undefined
+
+    console.log(it)
+
+    // mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+    //     let dbb = client.db()    
+    //     dbb.collection("locs").insertOne(it)
+    //     })
 
 })
 

@@ -174,22 +174,9 @@
                 <img alt="" id="locImgTemp">
 
             </div>
-            <!-- <div id="locTitle"></div>
-            <img src="" alt="" id="mainImg"> -->
         </div>
         <div id="log"></div>
     </div>
-
-    <!-- <div id="two">
-    </div> -->
-
-    <!-- <script> /// a try to prevent form redirecting after submitting
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-    </script> -->
-
-
 
     <script>
         ///////////////////////////////////////////////////////////////////////
@@ -278,86 +265,42 @@
         ////getting data and images and insert them 
         window.onload = async () => {
             let d = await fetch("/locs")
-            let pd = await d.json()
-            // let pd1 = await JSON.parse(pd)
+            let pd = await d.json() ///or JSON.parse(pd)
             console.log("get from locs")
             console.log(pd)
 
-
             /////makeing dom 
             pd.forEach(e => {
-
-                // let h = document.createElement("h2")
-                // h.textContent = e.title
-                // mainTitle.textContent = e.title
-                // locTitle.textContent = e.title
-                console.log(e.path)
-                // imgCont.style.background = `url(${e.path})`
-                // let mainIMG = document.createElement("img")
-                // mainIMG.src = `${e.path}`
-
                 let labe = L.marker(e.coords).addTo(map)
-
-                /////pers making 
-                // e.pers.forEach(ee => {
-
-                //     perList = []
-
-                //     let p = document.createElement("div")
-                //     p.classList.add("per")
-                //     let b = document.createElement("img")
-                //     b.setAttribute.id = "before"
-                //     b.src = ee.b
-                //     let a = document.createElement("img")
-                //     a.src = ee.a
-                //     a.setAttribute.id = "before"
-
-                //     perList.push(p)
-                // })
-
-                // tripleLinkedList.push([e._id, h, mainIMG, labe, perList])
                 tripleLinkedList.push([e._id, e.title, e.path, labe, perList])
 
                 ////inserting the created dom on the template; on eventlistener 
 
                 labe.addEventListener("click", (e) => {
 
-                    console.log(tripleLinkedList)
-
                     tripleLinkedList.forEach(tr => {
                         if (tr[3] == e.target) {
-                            console.log(e.target)
-                            console.log(tr)
-
                             locImgTemp.style.backgroundImage = `url(${tr[2]})`
                             locImgTemp.style.backgroundSize = "cover"
                             locImgTemp.style.backgroundPosition = "center"
 
                             mainTitle.textContent = tr[1]
-                            // main.removeChild()
-                            // main.innerHTML = ""
-                            // main.append(tr[1], tr[2])
 
                             currentID = tr[0]
-
-                            // main.append(...tr[3])    //for pers appending 
                         }
                     })
                 })
             })
-
-            // img1.src = `${pd}`
-
         }
+
+
 
 
         // adding coordinates; 
 
         let addCoords = document.querySelector("#addingCoords")
         addCoords.onclick = () => {
-            console.log("clicked on add coords button")
             addCoords.classList.toggle("on")
-            console.log(mobject)
         }
 
         map.addEventListener('click', function (ev) {
@@ -371,16 +314,12 @@
 
                 ////object eventlistender
                 m.addEventListener("click", (e) => {
-                    // console.log(e)
                     mobject.forEach(ee => {
                         ee.setIcon(oldIcon)
                     })
                     e.target.setIcon(markerIcon)
                     currentCoords = e.target._latlng
-                    console.log(currentCoords)
                 })
-
-                ////containers set
                 currentCoords = i
             }
         });
@@ -398,63 +337,13 @@
         let fd = new FormData()
 
 
-
-        ////////////////////mdn code 
-        /////xhr xmlhttprequest formData 
-        // const btn = document.querySelector('button');
-
-        // function sendData(data) {
-        //     const XHR = new XMLHttpRequest(),
-        //         FD = new FormData();
-
-        //     // Push our data into our FormData object
-        //     for (name in data) {
-        //         FD.append(name, data[name]);
-        //     }
-        //     // FD.append(imgc.files[0])
-        //     // FD.append('userpic', imgc.files[0], 'chris.jpg');
-
-
-        //     // Define what happens on successful data submission
-        //     XHR.addEventListener('load', function (event) {
-        //         alert('Yeah! Data sent and response loaded.');
-        //     });
-
-        //     // Define what happens in case of error
-        //     XHR.addEventListener(' error', function (event) {
-        //         alert('Oops! Something went wrong.');
-        //     });
-
-        //     // Set up our request
-        //     XHR.open('POST', 'upl');
-
-        //     // Send our FormData object; HTTP headers are set automatically
-        //     XHR.send(FD);
-        // }
-
-
-
-
         sendLoc.addEventListener("click", async () => {
 
-
-            ///appending the intended data 
-            // fd.append("coords", JSON.stringify(currentCoords))
+            ///appending the intended data to the formData
             fd.append("coords", currentCoords)
             fd.append("title", title.value)
             fd.append("etitle", etitle.value)
             fd.append("image", locImg.files[0])
-
-            // let p = fetch("/locs", {
-            //     method: "POST",
-            //     headers: {
-            //         'Accept': 'application/json',
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({
-            //         coords: currentCoords
-            //     })
-            // })
 
             /////check if there is a missing value 
             console.log(currentCoords)
@@ -465,50 +354,28 @@
             console.log(fd)
 
             /////sending xml formdata 
-            if (currentCoords != "" && title.value != "" && etitle.value != "" && locImg.files != null) {
-                xml.open("POST", "/locs")
-                xml.send(fd)
+            ///////check if valid (not empty)
+            if (currentCoords != undefined && title.value != "" && etitle.value != "" &&
+                locImg.files != null) {
+                /////xml method; 
+                // xml.open("POST", "/locs")
+                // xml.send(fd)
+
+                let d = await fetch("/locs", {
+                    method: "POST",
+                    body: fd
+                })
             }
-
-
-            currentCoords = ""
+            /////empty the data containers 
+            currentCoords = undefined
+            // title.value = undefined
             title.value = ""
+            // etitle.value = undefined
             etitle.value = ""
             locImg.files = null
 
             console.log(locImg.files)
-
-            /////empty the data containers 
-
-            // if (currentCoords != [] || ) {
-
-            // } else {}
-
-            // let d = await fetch('locs', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Accept': 'application/json',
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({
-            //         coords: currentCoords
-            //     })
-            // });
-
         })
-
-
-
-
-        // send.addEventListener('click', function () {
-        //     sendData({
-        //         test: 'ok',
-        //         file: imgc.files[0]
-        //     });
-        // })
-
-
-
 
 
         ///////////////test code 
@@ -519,9 +386,6 @@
             // console.log(title.value)
             // console.log(imgc.files)
         }
-
-
-        /////have trouble appending on the server side to identify that this is file 
     </script>
 </body>
 
