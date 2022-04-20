@@ -465,8 +465,10 @@
             console.log(fd)
 
             /////sending xml formdata 
-            xml.open("POST", "/locs")
-            xml.send(fd)
+            if (currentCoords != "" && title.value != "" && etitle.value != "" && locImg.files != null) {
+                xml.open("POST", "/locs")
+                xml.send(fd)
+            }
 
 
             currentCoords = ""
