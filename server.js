@@ -139,11 +139,12 @@ app.get("/locs", (req, res)=>{
 ////conts storing plan
 
 let contStorage = multer.diskStorage({
+
     destination: (req, file, cb)=>{
 
         console.log("file is ")
-        // console.log(req.body)
-        // console.log(file)
+        console.log(req.body)
+        console.log(file)
 
         let dir = `./public/conts/${req.body.etitle}`
         fs.exists(dir, exist => {
@@ -165,12 +166,17 @@ app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
 
     console.log("post conts")
     console.log(req.body)
+    // console.log(req.data)
     // console.log(typeof req.body.imgs)
 
     // let i = req.body.imgs
     // console.log(i)
 
 })
+
+// app.post("/conts1", (req, res)=>{
+//     console.log(req.body)
+// })
 
 /////////////////////test code 
 
@@ -179,8 +185,6 @@ app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
     //     let dbb = client.db()    
     //     dbb.collection("locs").deleteMany()
     //     })
-
-
 
 
 

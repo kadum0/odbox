@@ -156,11 +156,11 @@
                 <!-- adding conts  -->
 
                 <div class="form" id="addingConts">
-                    <form action="/conts" method="POST">
-                        <label for="contImg">اضافة مشاركة</label>
-                        <input type="file" id="contImg" name="Cont" multiple>
-                        <input type="submit">
-                    </form>
+                    <!-- <form action="/conts" method="POST"> -->
+                    <label for="contImg">اضافة مشاركة</label>
+                    <input type="file" id="contImg" name="Cont" multiple>
+                    <!-- <input type="submit"> -->
+                    <!-- </form> -->
                     <!-- <input type="text" id="titleCont" name="title" placeholder="title"> -->
                     <!-- <input type="text" id="etitleCont" name="etitle" placeholder="etitle"> -->
                     <button id="sendCont">send conts</button>
@@ -274,6 +274,7 @@
         let perList = []
         let currentID ////no need 
 
+        let filesCounter = 0
 
         /////containers for sending conts 
 
@@ -404,27 +405,27 @@
         })
 
 
-
         sendCont.onclick = async () => {
 
             let fdCont = new FormData()
+
             fdCont.append("etitle", currentEtitle)
-            fdCont.append("imgs", contImgs.files)
-
-            // for (let i = 0; i < contImgs.length; i++) {
-            //     fdCont.append(contImgs.files[i].name, files[i])
-            // }
-
-            // Array.from.contImgs.files.forEach(e => fdCont.append("img" + contImgs.files.indexof(e), e))
-
+            for (let i of contImgs.files) {
+                fdCont.append(`Cont`, i);
+                console.log(i)
+            }
             console.log(fdCont)
             console.log(currentEtitle)
-            // fdCont.append("imgs", contImgs.files)
 
 
             if (currentEtitle != undefined && contImgs.files != undefined) {
-                let d = fetch("/conts", {
+
+                // xml.open("POST", "/conts")
+                // xml.send(fdCont)
+
+                let d = await fetch("/conts", {
                     method: "POST",
+                    // data: fdCont,
                     body: fdCont
                 })
             }
