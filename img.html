@@ -111,7 +111,7 @@
 
         #forms {}
 
-        form {
+        .form {
             padding: 1rem;
             background: rgb(105, 255, 105);
             margin: 1rem;
@@ -134,11 +134,13 @@
             <div id="forms">
                 <!-- adding loc -->
                 <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingLoc"> -->
-                <input type="text" id="title" name="title" placeholder="title">
-                <input type="text" id="etitle" name="etitle" placeholder="etitle">
-                <label for="loc">اضافة محطة</label>
-                <input type="file" id="locImg" name="loc">
-                <button id="sendLoc">send loc</button>
+                <div class="form" id="addingLocs">
+                    <input type="text" id="title" name="title" placeholder="title">
+                    <input type="text" id="etitle" name="etitle" placeholder="etitle">
+                    <label for="loc">اضافة محطة</label>
+                    <input type="file" id="locImg" name="loc">
+                    <button id="sendLoc">send loc</button>
+                </div>
                 <!-- <input type="submit" id="send"> -->
                 <!-- </form> -->
 
@@ -152,6 +154,15 @@
                 </form> -->
 
                 <!-- adding conts  -->
+
+                <div class="form" id="addingConts">
+                    <!-- <input type="text" id="titleCont" name="title" placeholder="title"> -->
+                    <!-- <input type="text" id="etitleCont" name="etitle" placeholder="etitle"> -->
+                    <label for="contImg">اضافة مشاركة</label>
+                    <input type="file" id="contImg" name="Cont" multiple="multiple">
+                    <button id="sendCont">send conts</button>
+                </div>
+
                 <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingConts">
                     <input type="text" id="title" name="title">
                     <label for="cont">اضافة مشاركة</label>
@@ -217,29 +228,35 @@
 
         /////DOM elements 
 
+        ///locs
         let sendLoc = document.querySelector("#sendLoc")
-        let sendCont = document.querySelector("#sendCont")
-        let sendPer = document.querySelector("#sendPer")
-
-
-        /////locs dom elements 
-        let profile = document.querySelector("#profile")
-        let main = document.querySelector("#main")
-        let locTitle = document.querySelector("#locTitle")
-        let mainImg = document.querySelector("#mainImg")
-        let locImgTemp = document.querySelector("#locImgTemp")
-
         let title = document.querySelector("#title")
         let etitle = document.querySelector("#etitle")
         let locImg = document.querySelector("#locImg")
 
-        let imgc = document.querySelector("#image")
-        let img1 = document.querySelector("#img1")
+        ///conts
+        let contImgs = document.querySelector("#contImg")
+        let sendCont = document.querySelector("#sendCont")
 
+        ///pers
+        let sendPer = document.querySelector("#sendPer")
 
-
+        /////template dom elements 
+        let locImgTemp = document.querySelector("#locImgTemp")
         let imgCont = document.querySelector("#imgCont")
         let mainTitle = document.querySelector("#mainTitle")
+
+        let profile = document.querySelector("#profile") ///no need
+        let main = document.querySelector("#main") ///no need
+        let locTitle = document.querySelector("#locTitle") ///no need
+        let mainImg = document.querySelector("#mainImg") ///no need
+        let imgc = document.querySelector("#image") ///no need
+        let img1 = document.querySelector("#img1") ///no need
+
+
+
+
+
 
 
         /////containers to deploy functionalities
@@ -248,10 +265,11 @@
 
         ////containers for sending locs 
         let currentCoords ////coords 
+        let currentEtitle
 
         /////container for sending pers 
         let perList = []
-        let currentID
+        let currentID ////no need 
 
 
         /////containers for sending conts 
@@ -286,7 +304,8 @@
 
                             mainTitle.textContent = tr[1]
 
-                            currentID = tr[0]
+                            // currentID = tr[0]
+                            currentEtitle = tr[1]
                         }
                     })
                 })
@@ -321,6 +340,9 @@
                     currentCoords = e.target._latlng
                 })
                 currentCoords = i
+
+                ////select current etitle
+
             }
         });
 
@@ -334,10 +356,11 @@
         /////xmlhttprequest and formdata 
 
         let xml = new XMLHttpRequest()
-        let fd = new FormData()
 
 
         sendLoc.addEventListener("click", async () => {
+
+            let fd = new FormData()
 
             ///appending the intended data to the formData
             fd.append("coords", currentCoords)
@@ -365,17 +388,35 @@
                     method: "POST",
                     body: fd
                 })
-            }
-            /////empty the data containers 
-            currentCoords = undefined
-            // title.value = undefined
-            title.value = ""
-            // etitle.value = undefined
-            etitle.value = ""
-            locImg.files = null
 
-            console.log(locImg.files)
+                /////empty the data containers 
+                currentCoords = undefined
+                // title.value = undefined
+                title.value = ""
+                // etitle.value = undefined
+                etitle.value = ""
+                locImg.files = null
+                console.log(locImg.files)
+            }
         })
+
+
+
+        sendCont.onclick = async () => {
+
+            let fdCont = new FormData()
+            fdCont.append("etitle", currentEtitle)
+            fdCont.append("imgs", contImgs.files)
+
+            if (currentEtitle != undefined && contImgs.files != undefined) {
+
+                let d = fetch("/conts", {
+                    method: "POST",
+                    body: fdCont
+                })
+            }
+
+        }
 
 
         ///////////////test code 
