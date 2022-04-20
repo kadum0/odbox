@@ -156,10 +156,13 @@
                 <!-- adding conts  -->
 
                 <div class="form" id="addingConts">
+                    <form action="/conts" method="POST">
+                        <label for="contImg">اضافة مشاركة</label>
+                        <input type="file" id="contImg" name="Cont" multiple>
+                        <input type="submit">
+                    </form>
                     <!-- <input type="text" id="titleCont" name="title" placeholder="title"> -->
                     <!-- <input type="text" id="etitleCont" name="etitle" placeholder="etitle"> -->
-                    <label for="contImg">اضافة مشاركة</label>
-                    <input type="file" id="contImg" name="Cont" multiple="multiple">
                     <button id="sendCont">send conts</button>
                 </div>
 
@@ -408,14 +411,23 @@
             fdCont.append("etitle", currentEtitle)
             fdCont.append("imgs", contImgs.files)
 
-            if (currentEtitle != undefined && contImgs.files != undefined) {
+            // for (let i = 0; i < contImgs.length; i++) {
+            //     fdCont.append(contImgs.files[i].name, files[i])
+            // }
 
+            // Array.from.contImgs.files.forEach(e => fdCont.append("img" + contImgs.files.indexof(e), e))
+
+            console.log(fdCont)
+            console.log(currentEtitle)
+            // fdCont.append("imgs", contImgs.files)
+
+
+            if (currentEtitle != undefined && contImgs.files != undefined) {
                 let d = fetch("/conts", {
                     method: "POST",
                     body: fdCont
                 })
             }
-
         }
 
 

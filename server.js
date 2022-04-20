@@ -70,13 +70,13 @@ app.get("/img", (req, res)=>{
 ///send it in a res 
 
 
-//////making second plan 
+//////making locs storing plan
 let storage2 =multer.diskStorage({
     destination: (req, file, cb)=>{
 
         console.log(req.body)
         console.log(file)
-        // let trimmed = req.body.etitle.trim()
+
         let dir = `./public/locs;imgs/${req.body.etitle}`
         fs.exists(dir, exist => {
             if (!exist) {
@@ -122,9 +122,7 @@ app.post("/locs", upload2.any(), (req, res)=>{
     console.log(it)
 
         })
-
 })
-
 
 app.get("/locs", (req, res)=>{
     mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
@@ -137,8 +135,42 @@ app.get("/locs", (req, res)=>{
 })
 
 
-/////making the main object to send for; locs
 
+////conts storing plan
+
+let contStorage = multer.diskStorage({
+    destination: (req, file, cb)=>{
+
+        console.log("file is ")
+        // console.log(req.body)
+        // console.log(file)
+
+        let dir = `./public/conts/${req.body.etitle}`
+        fs.exists(dir, exist => {
+            if (!exist) {
+                return fs.mkdir(dir, error => cb(error, dir))
+            }
+            return cb(null, dir)
+            })
+    }
+    // filename: (req, file, cb)=>{
+    //     cb(null, new Date()+file.originalname)
+    // }
+})
+let uploadCont = multer({storage: contStorage})
+// uploadCont.fields()
+
+/////conts route
+app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
+
+    console.log("post conts")
+    console.log(req.body)
+    // console.log(typeof req.body.imgs)
+
+    // let i = req.body.imgs
+    // console.log(i)
+
+})
 
 /////////////////////test code 
 
