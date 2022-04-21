@@ -10,12 +10,13 @@ const multer  = require("multer")
 let bodyParser = require('body-parser')
 
 //express configuration 
-// app.use(express.json())
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 // parse application/json
-app.use(bodyParser.json())
+// app.use(bodyParser.json()) /// no need
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: true }))
+// app.use(bodyParser.urlencoded({extended: true})) //no need
 
 
 app.use(cors())
@@ -93,7 +94,8 @@ let storage2 =multer.diskStorage({
 
 let upload2 = multer({storage: storage2})
 
-let it ={}
+
+let it ={}  ///may should be defined at the route
 
 //////locs 
 app.post("/locs", upload2.any(), (req, res)=>{
@@ -101,6 +103,7 @@ app.post("/locs", upload2.any(), (req, res)=>{
 
     ////////////setting object data container
     it.title = req.body.title
+    it.etitle = req.body.etitle
     it.path = `/locs;imgs/${req.body.etitle}/mainImg.png`
     it.coords = req.body.coords.split(",")
     it.pers = []
@@ -125,9 +128,39 @@ app.post("/locs", upload2.any(), (req, res)=>{
 })
 
 app.get("/locs", (req, res)=>{
+
+    let obj = {}
+
     mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
         let dbb = client.db()
+        ////locs
         let results = await dbb.collection("locs").find().toArray()
+        ///conts
+        // let contsRes = await dbb.collection("conts").find().toArray()
+        // console.log(contsRes)
+        // contsRes.forEach(e=>{
+        //     // e.path
+        //     fs.readdir(e.path, (err, files) => {
+        //         files.forEach(file => {
+        //         console.log(e.path+file);
+        //     })});
+            
+        // })
+        results.forEach(e=>{
+            console.log("/conts/"+e.etitle)
+            fs.readdir("/conts/"+e.etitle, (err, files)=>{
+                console.log("about to files foreach")
+                console.log(files)
+                if(files != undefined){
+                files.forEach(ee=>{
+                    console.log(ee)
+                    // e.conts.append("./conts"+e.etitle+ee)
+                })
+                }
+            })
+        })
+
+        console.log(results)
         res.send(results)
         // console.log(results)
         })
@@ -137,6 +170,7 @@ app.get("/locs", (req, res)=>{
 
 
 ////conts storing plan
+let contDir
 
 let contStorage = multer.diskStorage({
 
@@ -146,17 +180,17 @@ let contStorage = multer.diskStorage({
         console.log(req.body)
         console.log(file)
 
-        let dir = `./public/conts/${req.body.etitle}`
-        fs.exists(dir, exist => {
+        contDir = `./public/conts/${req.body.etitle}`
+        fs.exists(contDir, exist => {
             if (!exist) {
-                return fs.mkdir(dir, error => cb(error, dir))
+                return fs.mkdir(contDir, error => cb(error, contDir))
             }
-            return cb(null, dir)
+            return cb(null, contDir)
             })
+    },
+    filename: (req, file, cb)=>{
+        cb(null, new Date().toISOString().replace(/:/g, '-') +file.originalname)
     }
-    // filename: (req, file, cb)=>{
-    //     cb(null, new Date()+file.originalname)
-    // }
 })
 let uploadCont = multer({storage: contStorage})
 // uploadCont.fields()
@@ -166,12 +200,12 @@ app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
 
     console.log("post conts")
     console.log(req.body)
-    // console.log(req.data)
-    // console.log(typeof req.body.imgs)
 
-    // let i = req.body.imgs
-    // console.log(i)
-
+    /////mongodb 
+    // mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+    //     let dbb = client.db()    
+    //     dbb.collection("conts").insertOne({etitle: req.body.etitle, path: contDir})
+    //     })
 })
 
 // app.post("/conts1", (req, res)=>{
