@@ -107,6 +107,7 @@ app.post("/locs", upload2.any(), (req, res)=>{
     it.path = `/locs;imgs/${req.body.etitle}/mainImg.png`
     it.coords = req.body.coords.split(",")
     it.pers = []
+    it.conts = []
 
     console.log(it)
 
@@ -144,21 +145,25 @@ app.get("/locs", (req, res)=>{
         //         files.forEach(file => {
         //         console.log(e.path+file);
         //     })});
-            
         // })
-        results.forEach(e=>{
-            console.log("/conts/"+e.etitle)
-            fs.readdir("/conts/"+e.etitle, (err, files)=>{
-                console.log("about to files foreach")
-                console.log(files)
-                if(files != undefined){
-                files.forEach(ee=>{
-                    console.log(ee)
-                    // e.conts.append("./conts"+e.etitle+ee)
-                })
-                }
-            })
-        })
+
+
+        /// ////getting the conts imgs paths related to the intended loc
+        /// cant access the dir
+        // results.forEach(e=>{
+        //     console.log("/conts/"+e.etitle)
+        //     console.log(path.join("\conts", e.etitle))
+        //     fs.readdir("./conts/"+e.etitle, (err, files)=>{
+        //         console.log("about to files foreach")
+        //         console.log(files)
+        //         if(files != undefined){
+        //         files.forEach(ee=>{
+        //             console.log(ee)
+        //             // e.conts.append("./conts"+e.etitle+ee)
+        //         })
+        //         }
+        //     })
+        // })
 
         console.log(results)
         res.send(results)
@@ -170,7 +175,9 @@ app.get("/locs", (req, res)=>{
 
 
 ////conts storing plan
-let contDir
+let contDir ///dir
+let contFilList = [] ///file
+let fil ///file name (path)
 
 let contStorage = multer.diskStorage({
 
@@ -181,6 +188,7 @@ let contStorage = multer.diskStorage({
         console.log(file)
 
         contDir = `./public/conts/${req.body.etitle}`
+        // contDirList.push(contDir)
         fs.exists(contDir, exist => {
             if (!exist) {
                 return fs.mkdir(contDir, error => cb(error, contDir))
@@ -189,7 +197,9 @@ let contStorage = multer.diskStorage({
             })
     },
     filename: (req, file, cb)=>{
-        cb(null, new Date().toISOString().replace(/:/g, '-') +file.originalname)
+        fil = new Date().toISOString().replace(/:/g, '-') +file.originalname
+        contFilList.push("./conts/"+req.body.etitle+fil)
+        cb(null, fil)
     }
 })
 let uploadCont = multer({storage: contStorage})
@@ -201,11 +211,26 @@ app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
     console.log("post conts")
     console.log(req.body)
 
+
+
+
     /////mongodb 
-    // mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-    //     let dbb = client.db()    
-    //     dbb.collection("conts").insertOne({etitle: req.body.etitle, path: contDir})
-    //     })
+    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+        let dbb = client.db()
+
+        let found = await dbb.collection("locs").findOne({etitle: req.body.etitle})
+
+        console.log("found . conts is; ")
+        console.log(found)
+        console.log(typeof found)
+
+        await dbb.collection("locs").findOneAndUpdate({_id : ObjectID(found._id)},{ $set: { conts: [...contFilList] } })
+        found.conts.push(...contFilList)
+
+        console.log(found)
+
+        // dbb.collection("locs").insertOne({etitle: req.body.etitle, path: contDir})
+        })
 })
 
 // app.post("/conts1", (req, res)=>{
@@ -225,5 +250,5 @@ app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
 
 
 ///////establishing
-app.listen(process.env.PORT || 3442, ()=>console.log("listennig ..."))
+app.listen(process.env.PORT || 3001, ()=>console.log("listennig ..."))
 
