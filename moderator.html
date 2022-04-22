@@ -208,6 +208,15 @@
                     <button id="sendCont">send conts</button>
                 </div>
 
+                <div class="form" id="addingDist">
+                    <label for="distBImg">اضافة صورة قبل</label>
+                    <input type="file" id="distBImg" name="distBImg">
+                    <label for="distAImg">اضافة صورة بعد</label>
+                    <input type="file" id="distAImg" name="distAImg">
+                    <input type="text" id="distInfo" placeholder="info">
+                    <button id="sendDist"> send dist</button>
+                </div>
+
                 <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingConts">
                     <input type="text" id="title" name="title">
                     <label for="cont">اضافة مشاركة</label>
@@ -283,8 +292,12 @@
         let contImgs = document.querySelector("#contImg")
         let sendCont = document.querySelector("#sendCont")
 
-        ///pers
-        let sendPer = document.querySelector("#sendPer")
+        ///dist
+        let distBImg = document.querySelector("#distBImg")
+        let distAImg = document.querySelector("#distAImg")
+        let distInfo = document.querySelector("#distInfo")
+        let sendDist = document.querySelector("#sendDist")
+
 
         /////template dom elements 
         let locImgTemp = document.querySelector("#locImgTemp")
@@ -324,7 +337,11 @@
 
         /////containers for sending conts 
 
-
+        /// ///per (dist) ////not to create the objects to send that need to be
+        /// done when get send for it to get empty and not duplicated in case of
+        /// sending request after a request 
+        // let distObject = {}
+        // let perObject
 
 
 
@@ -476,13 +493,13 @@
 
 
 
-        //////////////POST data 
+        //////////////POST; send data 
 
         /////xmlhttprequest and formdata 
 
         let xml = new XMLHttpRequest()
 
-
+        /////send loc
         sendLoc.addEventListener("click", async () => {
 
             let fd = new FormData()
@@ -525,7 +542,7 @@
             }
         })
 
-
+        ////send cont
         sendCont.onclick = async () => {
 
             let fdCont = new FormData()
@@ -551,6 +568,61 @@
                 })
             }
         }
+
+
+        /////send dist; 
+        sendDist.addEventListener("click", async () => {
+
+            console.log(distInfo.value)
+
+            if (distBImg.files[0] && distAImg.files[0] && distInfo.value) {
+
+                let distObject = {}
+
+                distObject.B = distBImg.files[0]
+                distObject.A = distAImg.files[0]
+                distObject.info = distInfo.value
+                distObject.acceptedConts = acceptedConts
+                distObject.refusedConts = refusedConts
+                distObject.data = new Date()
+                distObject.locTitle = currentEtitle
+
+                let fdDist = new FormData()
+                fdDist.append("B", distBImg.files[0])
+                fdDist.append("A", distAImg.files[0])
+                fdDist.append("date", new Date())
+                fdDist.append("info", distInfo.value)
+                fdDist.append("acceptedConts", acceptedConts)
+                fdDist.append("refusedConts", refusedConts)
+                fdDist.append("loc-etitle", currentEtitle)
+
+                // await fetch("dist", {
+                //     method: "POST",
+                //     body: fdDist
+                // })
+
+                console.log(fdDist)
+                console.log(distObject)
+
+                /////empty the containers; 
+                distBImg.files[0] = null
+                distAImg.files[0] = null
+                distInfo.value = ""
+
+
+
+            }
+
+
+            // console.log(distObject)
+
+        })
+
+
+        ////for sending rules; 
+        ///make sure (check) the containers if they contain data 
+        ///make an object and insert the data in
+        ///empty the containers value 
 
 
         ///////////////test code 

@@ -201,14 +201,44 @@ let contStorage = multer.diskStorage({
 })
 let uploadCont = multer({storage: contStorage})
 
-/////conts route
+/////conts route; no main db, no get 
 app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
 
     console.log("post conts")
     console.log(req.body)
 })
 
+//////////////////////
 
+let distSorage = multer.diskStorage({
+
+    destination: (req, file, cb)=>{
+
+        // contDir = `./public/conts/${req.body.etitle}`
+        // // contDirList.push(contDir)
+        // fs.exists(contDir, exist => {
+        //     if (!exist) {
+        //         return fs.mkdir(contDir, error => cb(error, contDir))
+        //     }
+        //     return cb(null, contDir)
+        //     })
+    },
+    filename: (req, file, cb)=>{
+
+        // fil = new Date().toISOString().replace(/:/g, '-') +file.originalname
+        // contFilList.push("./conts/"+req.body.etitle+fil)
+        // cb(null, fil)
+    }
+})
+let uploadDist = multer({storage: distSorage})
+
+
+
+////dist post
+app.post("/dist", uploadDist, (req, res)=>{
+    console.log("post dist")
+    console.log(req.body)
+})
 
 
 /////////////////////test code 
