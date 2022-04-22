@@ -387,63 +387,18 @@
 
                     //////functionality (eventlistener)
                     con.addEventListener("click", (event) => {
-
                         if (event.target.classList.contains("accept")) {
-
-                            console.log("adding to accepted")
-                            // console.log(event.target.parentElement.children[0]
-                            //     .getAttribute("data-imgPath"))
-
                             acceptedConts.push(event.target.parentElement.children[0]
                                 .getAttribute("data-imgPath"))
-                            console.log(acceptedConts)
-
-                            event.target.parentElement.remove()
-
-                            // console.log(tripleLinkedList[0][6])
-
-                            ////could be no needed 
-                            // tripleLinkedList.forEach(nu => {
-                            //     nu[6].forEach(nu2 => {
-                            //         if (nu2 == event.target
-                            //             .parentElement.children[0]
-                            //             .getAttribute("data-imgPath")) {
-                            //             acceptedConts.push(event.target
-                            //                 .parentElement.children[
-                            //                     0].getAttribute(
-                            //                     "data-imgPath"))
-                            //         }
-                            //     })
-                            // })
-
-                        }
-                        if (event.target.classList.contains("refuse")) {
-
-                            console.log("adding to refused")
-                            refusedConts.push(event.target.parentElement.children[0]
-                                .getAttribute("data-imgPath"))
-                            console.log(refusedConts)
-
                             ////removing the dom element 
                             event.target.parentElement.remove()
-
-
-                            // tripleLinkedList.forEach(nu => {
-                            //     nu[6].forEach(nu2 => {
-                            //         if (nu2 == event.target
-                            //             .parentElement.children[0]
-                            //             .getAttribute("data-imgPath")) {
-                            //             refusedConts.push(event.target
-                            //                 .parentElement.children[
-                            //                     0].getAttribute(
-                            //                     "data-imgPath"))
-                            //         }
-                            //     })
-                            // })
-
                         }
-
-
+                        if (event.target.classList.contains("refuse")) {
+                            refusedConts.push(event.target.parentElement.children[0]
+                                .getAttribute("data-imgPath"))
+                            ////removing the dom element 
+                            event.target.parentElement.remove()
+                        }
                     })
                 })
 
@@ -610,18 +565,18 @@
                 distObject.locTitle = currentEtitle
 
                 let fdDist = new FormData()
-                fdDist.append("B", distBImg.files[0])
-                fdDist.append("A", distAImg.files[0])
                 fdDist.append("date", new Date())
+                fdDist.append("etitle", currentEtitle)
                 fdDist.append("info", distInfo.value)
                 fdDist.append("acceptedConts", acceptedConts)
                 fdDist.append("refusedConts", refusedConts)
-                fdDist.append("loc-etitle", currentEtitle)
+                fdDist.append("B", distBImg.files[0])
+                fdDist.append("A", distAImg.files[0])
 
-                // await fetch("dist", {
-                //     method: "POST",
-                //     body: fdDist
-                // })
+                await fetch("/dist", {
+                    method: "POST",
+                    body: fdDist
+                })
 
                 console.log(fdDist)
                 console.log(distObject)

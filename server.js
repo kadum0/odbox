@@ -106,7 +106,7 @@ app.post("/locs", upload2.any(), (req, res)=>{
     it.etitle = req.body.etitle
     it.path = `/locs;imgs/${req.body.etitle}/mainImg.png`
     it.coords = req.body.coords.split(",")
-    it.pers = []
+    it.dist = []
     it.conts = []
 
     console.log(it)
@@ -208,11 +208,37 @@ app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
     console.log(req.body)
 })
 
-//////////////////////
+//////////////////////Dist
 
+let newDistPath
 let distSorage = multer.diskStorage({
 
     destination: (req, file, cb)=>{
+
+        console.log("........destination.........")
+        ///go to locs; find the right dir; based on the etitle in the req.body
+        ///make before img and after img from files names
+        ///make a cont folder and tralsate the imgs paths in body.path
+
+        fs.readdir("./public/locs;imgs/"+req.body.etitle, async (err, file)=>{
+            if(err)throw err
+            let distDir = "dist-" + new Date().getFullYear() +"-" + new Date().getDate() +"-" + new Date().getDay()+"-" + new Date().getHours()+"-" + new Date().getMinutes()
+            // let distDdir = distDir.replace(" ", "-")
+            console.log(distDir)
+            newDistPath = "./public/locs;imgs/"+req.body.etitle+"/" + distDir
+            await fs.mkdir(newDistPath ,()=> cb(null, newDistPath))
+            // cb(null, distDir)
+        })
+
+        console.log(req.body.etitle)
+        console.log(file)
+
+        // cb(null, './public/distImgs')
+
+        ////go to locs; make a dist cont imgs folder with the dist number; tranlate to it the accepted imgs
+
+        ///get the imgs link (path); then insert it in a ?? (list)
+
 
         // contDir = `./public/conts/${req.body.etitle}`
         // // contDirList.push(contDir)
@@ -225,6 +251,27 @@ let distSorage = multer.diskStorage({
     },
     filename: (req, file, cb)=>{
 
+        console.log(".......file name...........")
+
+        let fileName = file.fieldname+ "."+ file.originalname.split(".")[1]
+
+        cb(null, fileName)
+
+        console.log("/locs;imgs/"+req.body.etitle +fileName)
+
+        ///get the intended doc and make an object to insert in it 
+        // let d = await dbb.collection("locs").updateOne({etitle: req.body.etitle}, {$set: {dists: newDist}})
+        // let d = await dbb.collection("locs").updateOne({etitle:
+        // req.body.etitle}, { $set: { dists :[{file.fieldname: }] } })  /// no
+        // update required but need to make an object and insert it at the dists
+        // array
+        
+        // mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+        // let dbb = client.db()
+        // })
+
+
+
         // fil = new Date().toISOString().replace(/:/g, '-') +file.originalname
         // contFilList.push("./conts/"+req.body.etitle+fil)
         // cb(null, fil)
@@ -232,13 +279,27 @@ let distSorage = multer.diskStorage({
 })
 let uploadDist = multer({storage: distSorage})
 
-
-
 ////dist post
-// app.post("/dist", uploadDist, (req, res)=>{
-//     console.log("post dist")
-//     console.log(req.body)
-// })
+app.post("/dist", uploadDist.any(), (req, res)=>{
+
+    console.log(".......post dist........")
+    console.log(req.body)
+    console.log(req.body.acceptedConts.split(","))
+    console.log(req.body.refusedConts.split(","))
+
+    ////get into the intended dist path; get the a and b 
+    ////change the path of the accepted conts 
+    /// make an object to put the path of a, b and the rest changed conts in
+    // form of array also the info and date 
+
+
+
+    ///take a look on the loc folder; based on the body etitle; and take the
+    ///imgs paths; b img, a img, conts imgs 
+    ///make a post to the db; find based on the etitle; to insert on the dists array; 
+    ///
+
+})
 
 
 /////////////////////test code 
