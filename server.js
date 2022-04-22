@@ -154,7 +154,7 @@ app.get("/locs", (req, res)=>{
                 files.forEach(ee=>{
 
                     console.log(ee)
-                    e.conts.push("./conts"+e.etitle+ee)
+                    e.conts.push("/conts/"+e.etitle +"/"+ee)
                 })
                 }
             })
