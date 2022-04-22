@@ -153,6 +153,7 @@ app.get("/locs", (req, res)=>{
                 if(files != undefined){
                 files.forEach(ee=>{
 
+                    console.log("......the gotten images at the loc........")
                     console.log(ee)
                     e.conts.push("/conts/"+e.etitle +"/"+ee)
                 })
@@ -209,6 +210,13 @@ app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
 })
 
 //////////////////////Dist
+
+
+// mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+// let dbb = client.db()
+// dbb.collection("locs").updateOne({etitle: "newading"}, {$set: {dists: []} })
+// })
+
 
 let newDistPath
 let distSorage = multer.diskStorage({
@@ -282,10 +290,36 @@ let uploadDist = multer({storage: distSorage})
 ////dist post
 app.post("/dist", uploadDist.any(), (req, res)=>{
 
+
     console.log(".......post dist........")
-    console.log(req.body)
-    console.log(req.body.acceptedConts.split(","))
-    console.log(req.body.refusedConts.split(","))
+
+    fs.mkdir(newDistPath +"/conts", ()=>console.log("created conts dir"))
+
+
+    req.body.acceptedConts.split(",").forEach(e=>{
+
+        console.log(".......old paths.......")
+        console.log(e)
+
+
+        let oldP = "./public"+ e
+        let ee = e.split("/")[e.split("/").length -1]
+        // console.log(ee)
+        let newP = newDistPath + "/conts/" + ee
+
+        fs.rename(oldP, newP, function (err) {
+            if (err) throw err
+            console.log('Successfully renamed - AKA moved!')
+        })
+    })
+    
+    // fs.readdir(newDistPath, (err, files)=>{
+
+    // })
+
+    // console.log(req.body)
+    // console.log(req.body.acceptedConts.split(","))
+    // console.log(req.body.refusedConts.split(","))
 
     ////get into the intended dist path; get the a and b 
     ////change the path of the accepted conts 
