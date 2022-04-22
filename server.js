@@ -235,10 +235,10 @@ let uploadDist = multer({storage: distSorage})
 
 
 ////dist post
-app.post("/dist", uploadDist, (req, res)=>{
-    console.log("post dist")
-    console.log(req.body)
-})
+// app.post("/dist", uploadDist, (req, res)=>{
+//     console.log("post dist")
+//     console.log(req.body)
+// })
 
 
 /////////////////////test code 

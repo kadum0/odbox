@@ -390,34 +390,56 @@
 
                         if (event.target.classList.contains("accept")) {
 
-                            tripleLinkedList.forEach(nu => {
-                                nu[6].forEach(nu2 => {
-                                    if (nu2 == event.target
-                                        .parentElement.children[0]
-                                        .getAttribute("data-imgPath")) {
-                                        acceptedConts.push(event.target
-                                            .parentElement.children[
-                                                0].getAttribute(
-                                                "data-imgPath"))
-                                    }
-                                })
-                            })
+                            console.log("adding to accepted")
+                            // console.log(event.target.parentElement.children[0]
+                            //     .getAttribute("data-imgPath"))
+
+                            acceptedConts.push(event.target.parentElement.children[0]
+                                .getAttribute("data-imgPath"))
+                            console.log(acceptedConts)
+
+                            event.target.parentElement.remove()
+
+                            // console.log(tripleLinkedList[0][6])
+
+                            ////could be no needed 
+                            // tripleLinkedList.forEach(nu => {
+                            //     nu[6].forEach(nu2 => {
+                            //         if (nu2 == event.target
+                            //             .parentElement.children[0]
+                            //             .getAttribute("data-imgPath")) {
+                            //             acceptedConts.push(event.target
+                            //                 .parentElement.children[
+                            //                     0].getAttribute(
+                            //                     "data-imgPath"))
+                            //         }
+                            //     })
+                            // })
 
                         }
                         if (event.target.classList.contains("refuse")) {
 
-                            tripleLinkedList.forEach(nu => {
-                                nu[6].forEach(nu2 => {
-                                    if (nu2 == event.target
-                                        .parentElement.children[0]
-                                        .getAttribute("data-imgPath")) {
-                                        refusedConts.push(event.target
-                                            .parentElement.children[
-                                                0].getAttribute(
-                                                "data-imgPath"))
-                                    }
-                                })
-                            })
+                            console.log("adding to refused")
+                            refusedConts.push(event.target.parentElement.children[0]
+                                .getAttribute("data-imgPath"))
+                            console.log(refusedConts)
+
+                            ////removing the dom element 
+                            event.target.parentElement.remove()
+
+
+                            // tripleLinkedList.forEach(nu => {
+                            //     nu[6].forEach(nu2 => {
+                            //         if (nu2 == event.target
+                            //             .parentElement.children[0]
+                            //             .getAttribute("data-imgPath")) {
+                            //             refusedConts.push(event.target
+                            //                 .parentElement.children[
+                            //                     0].getAttribute(
+                            //                     "data-imgPath"))
+                            //         }
+                            //     })
+                            // })
 
                         }
 
