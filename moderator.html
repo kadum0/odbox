@@ -116,6 +116,29 @@
             background: rgb(105, 255, 105);
             margin: 1rem;
         }
+
+        /* conts */
+        .con {
+            height: 5rem;
+            width: 8rem;
+        }
+
+        .con img {
+            background: url("./conts/newading/2022-04-21T14-56-45.458Zdcf96b9a-ba88-46cc-96ef-54d2e3f14507_rwc_0x303x1677x261x1677\ -\ Copy.png");
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            width: 100%;
+
+        }
+
+        .con .accept {
+            background: green;
+        }
+
+        .con .refuse {
+            background: red;
+        }
     </style>
 </head>
 
@@ -124,7 +147,19 @@
     <div id="one">
 
         <!-- display conts to be confirmed -->
-        <div id="conts"></div>
+        <div id="conts">
+            <!-- <div class="con">
+                <img alt="">
+                <button class="accept">accept</button>
+                <button class="refuse">refuse</button>
+            </div>
+            <div class="con">
+                <img alt="">
+                <button class="accept">accept</button>
+                <button class="refuse">refuse</button>
+            </div> -->
+
+        </div>
         <div id="input">
 
             <!-- map -->
@@ -248,6 +283,7 @@
         let locImgTemp = document.querySelector("#locImgTemp")
         let imgCont = document.querySelector("#imgCont")
         let mainTitle = document.querySelector("#mainTitle")
+        let conts = document.querySelector("#conts")
 
         let profile = document.querySelector("#profile") ///no need
         let main = document.querySelector("#main") ///no need
@@ -273,6 +309,9 @@
         /////container for sending pers 
         let perList = []
         let currentID ////no need 
+        let displayedContImgs = []
+        let acceptedConts = []
+        let refusedConts = []
 
         let filesCounter = 0
 
@@ -293,11 +332,79 @@
 
             /////makeing dom 
             pd.forEach(e => {
+                /////coords; lables
                 let labe = L.marker(e.coords).addTo(map)
-                tripleLinkedList.push([e._id, e.etitle, e.title, e.path, labe, perList])
+                console.log(e.conts)
+
+                /////creating conts imgs and inserting them 
+                e.conts.forEach(mg => {
+
+                    let con = document.createElement("div")
+                    con.classList.add("con")
+
+                    let img = document.createElement("img")
+                    img.style.backgroundImage = `url(${mg})`
+                    img.style.backgroundSize = "cover"
+                    img.style.backgroundPosition = "center"
+                    img.setAttribute("data-imgPath", mg)
+
+                    let acceptBtn = document.createElement("button")
+                    acceptBtn.classList.add("accept")
+
+                    let refurseBtn = document.createElement("button")
+                    refurseBtn.classList.add("refuse")
+
+                    con.append(img, acceptBtn, refurseBtn)
+
+
+                    displayedContImgs.push(img)
+
+                    //////functionality (eventlistener)
+                    con.addEventListener("click", (event) => {
+
+                        if (event.target.classList.contains("accept")) {
+
+                            tripleLinkedList.forEach(nu => {
+                                nu[6].forEach(nu2 => {
+                                    if (nu2 == event.target
+                                        .parentElement.children[0]
+                                        .getAttribute("data-imgPath")) {
+                                        acceptedConts.push(event.target
+                                            .parentElement.children[
+                                                0].getAttribute(
+                                                "data-imgPath"))
+                                    }
+                                })
+                            })
+
+                        }
+                        if (event.target.classList.contains("refuse")) {
+
+                            tripleLinkedList.forEach(nu => {
+                                nu[6].forEach(nu2 => {
+                                    if (nu2 == event.target
+                                        .parentElement.children[0]
+                                        .getAttribute("data-imgPath")) {
+                                        refusedConts.push(event.target
+                                            .parentElement.children[
+                                                0].getAttribute(
+                                                "data-imgPath"))
+                                    }
+                                })
+                            })
+
+                        }
+
+
+                    })
+                })
+
+                /////linked list
+                tripleLinkedList.push([e._id, e.etitle, e.title, e.path, labe, perList,
+                    displayedContImgs
+                ])
 
                 ////inserting the created dom on the template; on eventlistener 
-
                 labe.addEventListener("click", (e) => {
 
                     tripleLinkedList.forEach(tr => {
@@ -308,11 +415,16 @@
 
                             mainTitle.textContent = tr[2]
 
+                            tr[6].forEach(trImg => {
+                                conts.append(trImg)
+                            })
+
                             // currentID = tr[0]
                             currentEtitle = tr[1]
                         }
                     })
                 })
+
             })
         }
 

@@ -9,6 +9,8 @@ const fs = require("fs")
 const multer  = require("multer") 
 let bodyParser = require('body-parser')
 
+app.use(cors())
+
 //express configuration 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -19,14 +21,11 @@ app.use(express.urlencoded({ extended: false }))
 // app.use(bodyParser.urlencoded({extended: true})) //no need
 
 
-app.use(cors())
-
-
 ////////mongodb 
 //// mongo atlas
 
-let mongodb = require("mongodb").MongoClient
-const { ObjectID } = require("bson")
+let mongodb = require("mongodb").MongoClient  ///mongodb atlas
+const { ObjectID } = require("bson") 
 // const { markAsUntransferable } = require("worker_threads")
 // let ObjectId = require('mongodb').ObjectID;
 require("dotenv").config()
@@ -37,27 +36,26 @@ require("dotenv").config()
 
 ////////// pages to send
 app.use(express.static("./public"))
-// app.get("/", (req, res)=>{
-//     res.sendFile(__dirname +"/public/index.html")
-//     // res.sendFile(__dirname + "/public/map.js")
-// })
-
 app.get("/mode", (req, res)=>{
-    res.sendFile(__dirname+"/mode/moderator.html")
+    res.sendFile((__dirname+"/moderator.html"))
 })
 
-app.get("/img", (req, res)=>{
-    res.sendFile((__dirname+"/img.html"))
-    // res.sendFile("/projects/anybox/img.html")
-})
-
-////// trying to send a whole folder (directory); 
+////// trying to send a whole folder (directory) based on path; 
 // app.use('/mode', express.static('/mode'))
+// app.use('/mode', express.static(__dirname+'/mode'))
 // app.use('/mode', express.static(path.join(__dirname, 'mode')))
 
 
 
-////////////////////////////////routes 
+////////////////////////////////plan 
+///feature 1; post 
+///feature 1; get
+
+///feature 2; post
+///feature 2; get 
+
+///feature 3; post
+///feature 3; get
 
 
 ////post request; same route for both json data; currentCoords and form data; image, title,
@@ -70,6 +68,8 @@ app.get("/img", (req, res)=>{
 ///structure it in specific object form 
 ///send it in a res 
 
+
+////////////routes 
 
 //////making locs storing plan
 let storage2 =multer.diskStorage({
@@ -136,37 +136,39 @@ app.get("/locs", (req, res)=>{
         let dbb = client.db()
         ////locs
         let results = await dbb.collection("locs").find().toArray()
-        ///conts
-        // let contsRes = await dbb.collection("conts").find().toArray()
-        // console.log(contsRes)
-        // contsRes.forEach(e=>{
-        //     // e.path
-        //     fs.readdir(e.path, (err, files) => {
-        //         files.forEach(file => {
-        //         console.log(e.path+file);
-        //     })});
-        // })
-
 
         /// ////getting the conts imgs paths related to the intended loc
         /// cant access the dir
-        // results.forEach(e=>{
-        //     console.log("/conts/"+e.etitle)
-        //     console.log(path.join("\conts", e.etitle))
-        //     fs.readdir("./conts/"+e.etitle, (err, files)=>{
-        //         console.log("about to files foreach")
-        //         console.log(files)
-        //         if(files != undefined){
-        //         files.forEach(ee=>{
-        //             console.log(ee)
-        //             // e.conts.append("./conts"+e.etitle+ee)
-        //         })
-        //         }
-        //     })
-        // })
+        await results.forEach(e=>{
+            console.log("/conts/"+e.etitle)
+            console.log(path.join("\conts", e.etitle))
 
+            fs.readdir("./public/conts/"+e.etitle, (err, files)=>{
+
+                console.log("about to files foreach")
+                console.log(files)
+
+                if(err) throw err
+
+                if(files != undefined){
+                files.forEach(ee=>{
+
+                    console.log(ee)
+                    e.conts.push("./conts"+e.etitle+ee)
+                })
+                }
+            })
+        })
+
+        setTimeout(() => {
+            
         console.log(results)
+        console.log("results conts is; ")
+        console.log(results[0].conts)
         res.send(results)
+
+
+        }, 200);
         // console.log(results)
         })
 
@@ -182,11 +184,6 @@ let fil ///file name (path)
 let contStorage = multer.diskStorage({
 
     destination: (req, file, cb)=>{
-
-        console.log("file is ")
-        console.log(req.body)
-        console.log(file)
-
         contDir = `./public/conts/${req.body.etitle}`
         // contDirList.push(contDir)
         fs.exists(contDir, exist => {
@@ -203,39 +200,16 @@ let contStorage = multer.diskStorage({
     }
 })
 let uploadCont = multer({storage: contStorage})
-// uploadCont.fields()
 
 /////conts route
 app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
 
     console.log("post conts")
     console.log(req.body)
-
-
-
-
-    /////mongodb 
-    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-        let dbb = client.db()
-
-        let found = await dbb.collection("locs").findOne({etitle: req.body.etitle})
-
-        console.log("found . conts is; ")
-        console.log(found)
-        console.log(typeof found)
-
-        await dbb.collection("locs").findOneAndUpdate({_id : ObjectID(found._id)},{ $set: { conts: [...contFilList] } })
-        found.conts.push(...contFilList)
-
-        console.log(found)
-
-        // dbb.collection("locs").insertOne({etitle: req.body.etitle, path: contDir})
-        })
 })
 
-// app.post("/conts1", (req, res)=>{
-//     console.log(req.body)
-// })
+
+
 
 /////////////////////test code 
 
