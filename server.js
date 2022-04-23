@@ -195,7 +195,7 @@ let contStorage = multer.diskStorage({
             })
     },
     filename: (req, file, cb)=>{
-        fil = new Date().toISOString().replace(/:/g, '-') +file.originalname
+        fil = new Date().toISOString().replace(/:/g, '-') +file.originalname.replaceAll(" ", "")
         contFilList.push("./conts/"+req.body.etitle+fil)
         cb(null, fil)
     }
@@ -288,15 +288,31 @@ let distSorage = multer.diskStorage({
 let uploadDist = multer({storage: distSorage})
 
 ////dist post
-app.post("/dist", uploadDist.any(), (req, res)=>{
-
+app.post("/dist", uploadDist.any(), async (req, res)=>{
 
     console.log(".......post dist........")
 
-    fs.mkdir(newDistPath +"/conts", ()=>console.log("created conts dir"))
+    ///////make object 
+    let distObject ={}
+    distObject.conts = []
+
+    await fs.readdir(newDistPath, (err, files)=>{
+        files.forEach(e=>{
+
+            if(e.split(".")[0] == "A"){
+                distObject.A = (newDistPath+"/"+e).replace("./public", "")
+            }else{
+                distObject.B = (newDistPath + "/"+ e).replace("./public", "")
+            }
+        // distObject.conts.push(newDistPath+"/"+e)
+        })
+    })
+
+    ////making conts dir 
+    await fs.mkdir(newDistPath +"/conts", ()=>console.log("created conts dir"))
 
 
-    req.body.acceptedConts.split(",").forEach(e=>{
+    req.body.acceptedConts.split(",").forEach(async e=>{
 
         console.log(".......old paths.......")
         console.log(e)
@@ -307,11 +323,35 @@ app.post("/dist", uploadDist.any(), (req, res)=>{
         // console.log(ee)
         let newP = newDistPath + "/conts/" + ee
 
-        fs.rename(oldP, newP, function (err) {
+        distObject.conts.push((newDistPath+"/conts/"+ee).replace("./public", ""))
+
+        await fs.rename(oldP, newP, function (err) {
             if (err) throw err
             console.log('Successfully renamed - AKA moved!')
+
+            console.log(distObject)
         })
     })
+
+    distObject.info = req.body.info
+    distObject.date = req.body.date
+
+
+
+    // fs.readdir()
+
+
+    console.log(distObject)
+
+    /////////mongodb side; 
+    
+    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+    let dbb = client.db()
+        dbb.collection("locs").updateOne({etitle: req.body.etitle}, {$set:{dists: distObject}})
+    })
+
+
+    
     
     // fs.readdir(newDistPath, (err, files)=>{
 
