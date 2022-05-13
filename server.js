@@ -106,8 +106,8 @@ app.post("/locs", upload2.any(), (req, res)=>{
     it.etitle = req.body.etitle
     it.path = `/locs;imgs/${req.body.etitle}/mainImg.png`
     it.coords = req.body.coords.split(",")
-    it.dist = []
-    it.conts = []
+    // it.conts = []
+    it.dists = []
 
     console.log(it)
 
