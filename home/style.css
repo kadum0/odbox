@@ -1,0 +1,40 @@
+
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 0%;
+        }
+
+        #map {
+            height: 70vh;
+            width: 70vw;
+        }
+
+        button {
+            padding: .4rem;
+            background: "#148042";
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        .deletebtns {
+            padding: .5rem;
+            border: 2px dashed black;
+        }
+
+        .deletebtns button {
+            display: block;
+            margin: .2rem;
+        }
+
+        .btns {
+            display: flex;
+            flex-direction: column;
+            gap: .4rem;
+            font-size: 2.4rem;
+        }
+

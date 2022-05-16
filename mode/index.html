@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>anybox moderator</title>
+
+    <!-- leaflet cdn -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <div id="one">
+
+        <!-- display conts to be confirmed -->
+        <div id="conts">
+            <!-- <div class="con">
+                <img alt="">
+                <button class="accept">accept</button>
+                <button class="refuse">refuse</button>
+            </div>
+            <div class="con">
+                <img alt="">
+                <button class="accept">accept</button>
+                <button class="refuse">refuse</button>
+            </div> -->
+
+        </div>
+        <div id="input">
+
+            <!-- map -->
+            <div id="map"></div>
+
+            <!-- form button method -->
+            <div id="forms">
+                <!-- adding loc -->
+                <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingLoc"> -->
+                <div class="form" id="addingLocs">
+                    <input type="text" id="title" name="title" placeholder="title">
+                    <input type="text" id="etitle" name="etitle" placeholder="etitle">
+                    <label for="loc">اضافة محطة</label>
+                    <input type="file" id="locImg" name="loc">
+                    <button id="sendLoc">send loc</button>
+                </div>
+                <!-- <input type="submit" id="send"> -->
+                <!-- </form> -->
+
+                <!-- adding per -->
+                <!-- <form action="/perF" method="POST" enctype="multipart/form-data" id="addingPer">
+                    <input type="text" id="title" name="title">
+                    <label for="per">اضافة درة</label>
+
+                    <input type="file" id="per" name="per">
+                    <input type="submit" id="send">
+                </form> -->
+
+                <!-- adding conts  -->
+
+                <div class="form" id="addingConts">
+                    <!-- <form action="/conts" method="POST"> -->
+                    <label for="contImg">اضافة مشاركة</label>
+                    <input type="file" id="contImg" name="Cont" multiple>
+                    <!-- <input type="submit"> -->
+                    <!-- </form> -->
+                    <!-- <input type="text" id="titleCont" name="title" placeholder="title"> -->
+                    <!-- <input type="text" id="etitleCont" name="etitle" placeholder="etitle"> -->
+                    <button id="sendCont">send conts</button>
+                </div>
+
+                <div class="form" id="addingDist">
+                    <label for="distBImg">اضافة صورة قبل</label>
+                    <input type="file" id="distBImg" name="distBImg">
+                    <label for="distAImg">اضافة صورة بعد</label>
+                    <input type="file" id="distAImg" name="distAImg">
+                    <input type="text" id="distInfo" placeholder="info">
+                    <button id="sendDist"> send dist</button>
+                </div>
+
+                <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingConts">
+                    <input type="text" id="title" name="title">
+                    <label for="cont">اضافة مشاركة</label>
+
+                    <input type="file" id="cont" name="cont">
+                    <input type="submit" id="send">
+                </form> -->
+            </div>
+
+        </div>
+
+        <!-- adding coordinates -->
+        <button id="addingCoords">adding label</button>
+
+    </div>
+    <div id="profile">
+        <div id="main">
+            <h2 id="mainTitle">the mosque name</h2>
+            <div id="imgCont">
+                <img alt="" id="locImgTemp">
+
+            </div>
+        </div>
+        <div id="log"></div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>

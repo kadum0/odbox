@@ -1,79 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-    <!-- leaflet cdn -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-        crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-        crossorigin=""></script>
-
-    <style>
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin: 0%;
-        }
-
-        #map {
-            height: 70vh;
-            width: 70vw;
-        }
-
-        button {
-            padding: .4rem;
-            background: "#148042";
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-
-        .deletebtns {
-            padding: .5rem;
-            border: 2px dashed black;
-        }
-
-        .deletebtns button {
-            display: block;
-            margin: .2rem;
-        }
-
-        .btns {
-            display: flex;
-            flex-direction: column;
-            gap: .4rem;
-            font-size: 2.4rem;
-        }
-    </style>
-</head>
-
-<body>
-    <div id="map"></div>
-    <div class="btns">
-        <!-- <button id="add-mode">اضافة</button> -->
-        <!-- <input type="file" value="اضافة مشاركة"> -->
-        <div>
-            <label for="files" class="btn">اضافة مشاركة</label>
-            <input id="files" type="file" style="opacity: .4;">
-        </div>
-        <button id="send"> ارسال</button>
-
-    </div>
-
-    <!-- main script  -->
-    <script>
         ////setting up 
 
-        const map = L.map('map').setView([36.238708, 42.496588], 13); //leaflet basic map
+        const map = L.map('map').setView([33.396600, 44.356579], 9); //leaflet basic map
         //tile layer
         const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
 
@@ -148,7 +76,6 @@
 
 
 
-
         /////// features 
 
         /////add per conts images
@@ -165,9 +92,5 @@
 
         //////////// test code; 
         window.onclick = () => {}
-    </script>
 
 
-</body>
-
-</html>
