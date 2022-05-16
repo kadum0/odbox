@@ -76,6 +76,7 @@
         /////containers to deploy functionalities
         let tripleLinkedList = []
         let mobject = [] //??
+        let m 
 
         ////containers for sending locs 
         let currentCoords ////coords 
@@ -102,7 +103,8 @@
 
         //////////////////////features 
 
-        ////getting data and images and insert them 
+        /// /getting data and images and insert them; there are some conditions
+        /// to display the current conts if exist; then to add them when making per 
         window.onload = async () => {
             let d = await fetch("/locs")
             let pd = await d.json() ///or JSON.parse(pd)
@@ -194,9 +196,8 @@
         }
 
 
-
-
-        // adding coordinates; 
+        // adding coordinates; edit it to be able to add only one location;
+        // onlick remove the old marker and add new one 
 
         let addCoords = document.querySelector("#addingCoords")
         addCoords.onclick = () => {
@@ -204,25 +205,28 @@
         }
 
         map.addEventListener('click', function (ev) {
+            m?map.removeLayer(m):null
+
             if (addCoords.classList.contains("on")) {
                 let latlng = map.mouseEventToLatLng(ev.originalEvent);
                 let i = [latlng.lat, latlng.lng]
-                let m = L.marker(i, {
+                m = L.marker(i, {
                     icon: oldIcon
                 }).addTo(map);
-                mobject.push(m)
 
-                ////object eventlistender
-                m.addEventListener("click", (e) => {
-                    mobject.forEach(ee => {
-                        ee.setIcon(oldIcon)
-                    })
-                    e.target.setIcon(markerIcon)
-                    currentCoords = e.target._latlng
-                })
+
+                //////////for the home page one; 
+                // mobject.push(m)
+                // ////object eventlistender
+                // m.addEventListener("click", (e) => {
+                //     mobject.forEach(ee => {
+                //         ee.setIcon(oldIcon)
+                //     })
+                //     e.target.setIcon(markerIcon)
+                //     currentCoords = e.target._latlng
+                // })
+                
                 currentCoords = i
-
-                ////select current etitle
 
             }
         });
@@ -281,10 +285,7 @@
             console.log(currentEtitle)
 
 
-            if (currentEtitle != undefined && contImgs.files != undefined) {
-
-                // xml.open("POST", "/conts")
-                // xml.send(fdCont)
+            if (currentEtitle&& contImgs.files[0]){
 
                 let d = await fetch("/conts", {
                     method: "POST",

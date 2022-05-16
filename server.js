@@ -141,48 +141,52 @@ let contDir ///dir
 let contFilList = [] ///file
 let fil ///file name (path)
 
-let contStorage = multer.diskStorage({
+// let contStorage = multer.diskStorage({
 
-    destination: (req, file, cb)=>{
-        contDir = `./public/conts/${req.body.etitle}`
-        // contDirList.push(contDir)
-        fs.exists(contDir, exist => {
-            if (!exist) {
-                return fs.mkdir(contDir, error => cb(error, contDir))
-            }
-            return cb(null, contDir)
-            })
-    },
+//     destination: (req, file, cb)=>{
+//         contDir = `./public/conts/${req.body.etitle}`
+//         // contDirList.push(contDir)
+//         fs.exists(contDir, exist => {
+//             if (!exist) {
+//                 return fs.mkdir(contDir, error => cb(error, contDir))
+//             }
+//             return cb(null, contDir)
+//             })
+//     },
+//     filename: (req, file, cb)=>{
+//         fil = new Date().toISOString().replace(/:/g, '-') +file.originalname.replaceAll(" ", "")
+//         contFilList.push("./conts/"+req.body.etitle+fil)
+//         cb(null, fil)
+//     }
+// })
+// let uploadCont = multer({storage: contStorage})
+
+let contsImgPathList = []
+let contStorage = multer.diskStorage({
+    destination: "./public-imgs",
     filename: (req, file, cb)=>{
-        fil = new Date().toISOString().replace(/:/g, '-') +file.originalname.replaceAll(" ", "")
-        contFilList.push("./conts/"+req.body.etitle+fil)
-        cb(null, fil)
+        let path = new Date().toISOString().replace(/:/g, '-') +file.originalname.replaceAll(" ", "")
+        contsImgPathList.push(path)
+        cb(null, path)
     }
 })
-let uploadCont = multer({storage: contStorage})
+let multerCont = multer({storage: contStorage})
 
 /////conts route; no main db, no get 
 ////get into the loc and insert it in the locs conts; 
-app.post("/conts", (req, res)=>{
+app.post("/conts",(req, res, next)=>{contsImgPathList= []; next()}, multerCont.array("Cont") , (req, res)=>{
     console.log(".....conts")
     console.log(req.body)
+
+    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+        let dbb = client.db()
+        let foun = await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$push: {currentConts: contsImgPathList}})
+
+        // let found = await dbb.collection("locs").findOne({etitle:req.body.etitle})
+        // console.log(found)
 })
 
-// app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
-
-//     console.log("post conts")
-//     console.log(req.body)
-// })
-
-//////////////////////Dist
-/// get into the get conts paths then remove it from currentConts and add it to
-/// the itdist 
-
-
-// mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-// let dbb = client.db()
-// dbb.collection("locs").updateOne({etitle: "newading"}, {$set: {dists: []} })
-// })
+})
 
 
 let newDistPath
