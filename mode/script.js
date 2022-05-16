@@ -117,15 +117,16 @@
                 let label = L.marker(e.coords).addTo(map)
 
                 /////creating conts imgs and inserting them 
-                if(e.currentConts[0] == !undefined){
+                console.log(e.currentConts[0])
+                if(e.currentConts[0] != undefined){
 
-                e.conts.forEach(mg => {
+                e.currentConts.forEach(mg=>{
 
                     let con = document.createElement("div")
                     con.classList.add("con")
 
                     let img = document.createElement("img")
-                    img.style.backgroundImage = `url(${mg})`
+                    img.style.backgroundImage = `url(../${mg})`
                     img.style.backgroundSize = "cover"
                     img.style.backgroundPosition = "center"
                     img.setAttribute("data-imgPath", mg)
@@ -158,7 +159,8 @@
                             event.target.parentElement.remove()
                         }
                     })
-                })
+            })
+
             }
                 /////linked list
                 tripleLinkedList.push({
@@ -318,8 +320,8 @@
                 fdDist.append("info", distInfo.value)
                 fdDist.append("acceptedConts", acceptedConts)
                 fdDist.append("refusedConts", refusedConts)
-                fdDist.append("B", distBImg.files[0])
-                fdDist.append("A", distAImg.files[0])
+                fdDist.append("before", distBImg.files[0])
+                fdDist.append("after", distAImg.files[0])
 
                 await fetch("/dist", {
                     method: "POST",

@@ -108,18 +108,24 @@ app.post("/locs", multerLoc.any(), (req, res)=>{
     if(req.body.title&&req.body.etitle&&req.body.coords){
         mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
             let dbb = client.db()    
-            dbb.collection("locs").insertOne({
-                title: req.body.title, 
-                etitle: req.body.etitle, 
-                locImgPath: locImg,
-                coords: req.body.coords.split(","), 
-                currentConts: [],
-                dists: []
-            })
+
+            ////check if used etitle
+            if(await dbb.collection("locs").findOne({etitle: req.body.etitle})){
+                dbb.collection("locs").insertOne({
+                    title: req.body.title, 
+                    etitle: req.body.etitle, 
+                    locImgPath: locImg,
+                    coords: req.body.coords.split(","), 
+                    currentConts: [],
+                    dists: []
+                })
+            }else{
+                res.json({err: "already used etitle"})
+            }
         })
         res.sendStatus(200)
     }else{
-        res.sendStatus(400)
+        res.json({err: "no data sent"})
     }
 })
 
@@ -137,30 +143,7 @@ app.get("/locs", (req, res)=>{
 })
 
 
-let contDir ///dir
-let contFilList = [] ///file
-let fil ///file name (path)
-
-// let contStorage = multer.diskStorage({
-
-//     destination: (req, file, cb)=>{
-//         contDir = `./public/conts/${req.body.etitle}`
-//         // contDirList.push(contDir)
-//         fs.exists(contDir, exist => {
-//             if (!exist) {
-//                 return fs.mkdir(contDir, error => cb(error, contDir))
-//             }
-//             return cb(null, contDir)
-//             })
-//     },
-//     filename: (req, file, cb)=>{
-//         fil = new Date().toISOString().replace(/:/g, '-') +file.originalname.replaceAll(" ", "")
-//         contFilList.push("./conts/"+req.body.etitle+fil)
-//         cb(null, fil)
-//     }
-// })
-// let uploadCont = multer({storage: contStorage})
-
+////conts 
 let contsImgPathList = []
 let contStorage = multer.diskStorage({
     destination: "./public-imgs",
@@ -180,13 +163,76 @@ app.post("/conts",(req, res, next)=>{contsImgPathList= []; next()}, multerCont.a
 
     mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
         let dbb = client.db()
-        let foun = await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$push: {currentConts: contsImgPathList}})
+
+        contsImgPathList.forEach(async e=>{
+            await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$push: {currentConts: e}})
+        })
 
         // let found = await dbb.collection("locs").findOne({etitle:req.body.etitle})
         // console.log(found)
 })
 
 })
+
+
+// let distsImgPathList = []
+let before 
+let after 
+let distStorage = multer.diskStorage({
+    destination: "./public-imgs", 
+    filename: (req, file, cb)=>{
+        let path = new Date().toISOString().replace(/:/g, '-') +file.originalname.replaceAll(" ", "")
+        file.fieldname == "before"?before = path: after= path
+        // distsImgPathList.push(path)
+        cb(null, path)
+    }
+})
+let multerDist = multer({storage: distStorage})
+
+//////dist 
+app.post("/dist",(req, res, next)=>{before = ""; after = ""; next()}, multerDist.any(), (req, res)=>{
+    console.log("...............dist")
+    console.log(req.body)
+    if(req.body.acceptedConts[0]&&req.body.refusedConts&&req.body.info&&req.body.etitle&&after&&before){
+
+        console.log(typeof req.body.acceptedConts)
+    acceptedConts = req.body.acceptedConts.split(",")
+    refusedConts = req.body.acceptedConts.split(",")
+
+    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+        let dbb = client.db()
+        ////remove accepted 
+        acceptedConts.forEach(async e=>{
+            await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
+        })
+        ////remove refused
+        refusedConts.forEach(async e=>{
+            await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
+        })
+
+        let addDIst = await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$push: {dists: {
+            before: before, 
+            after: after,
+            info: req.body.info,
+            conts: acceptedConts, 
+        }}})
+
+        res.sendStatus(200)
+    })
+        }else{
+            res.json({err: "no data sent"})
+        }
+
+
+
+    console.log(before)
+    console.log(after)
+
+})
+
+
+
+
 
 
 let newDistPath
@@ -259,7 +305,7 @@ let distSorage = multer.diskStorage({
 let uploadDist = multer({storage: distSorage})
 
 ////dist post
-app.post("/dist", uploadDist.any(), async (req, res)=>{
+app.post("/distto", uploadDist.any(), async (req, res)=>{
 
     console.log(".......post dist........")
 
