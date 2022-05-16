@@ -84,7 +84,7 @@
         /////container for sending pers 
         let perList = []
         let currentID ////no need 
-        let displayedContImgs = []
+        let displayedContDivs = []
         let acceptedConts = []
         let refusedConts = []
 
@@ -112,10 +112,11 @@
             /////makeing dom 
             pd.forEach(e => {
                 /////coords; lables
-                let labe = L.marker(e.coords).addTo(map)
-                console.log(e.conts)
+                let label = L.marker(e.coords).addTo(map)
 
                 /////creating conts imgs and inserting them 
+                if(e.currentConts[0] == !undefined){
+
                 e.conts.forEach(mg => {
 
                     let con = document.createElement("div")
@@ -138,7 +139,7 @@
                     con.append(img, acceptBtn, refurseBtn)
 
 
-                    displayedContImgs.push(con)
+                    displayedContDivs.push(con)
 
                     //////functionality (eventlistener)
                     con.addEventListener("click", (event) => {
@@ -156,29 +157,35 @@
                         }
                     })
                 })
-
+            }
                 /////linked list
-                tripleLinkedList.push([e._id, e.etitle, e.title, e.path, labe, perList,
-                    displayedContImgs
-                ])
+                tripleLinkedList.push({
+                    id: e.id, 
+                    etitle: e.etitle,
+                    title: e.title, 
+                    imgPath: e.locImgPath,
+                    label: label, 
+                    perList: perList,
+                    displayedContDivs: displayedContDivs
+                })
 
                 ////inserting the created dom on the template; on eventlistener 
-                labe.addEventListener("click", (e) => {
+                label.addEventListener("click", (e) => {
 
                     tripleLinkedList.forEach(tr => {
-                        if (tr[4] == e.target) {
-                            locImgTemp.style.backgroundImage = `url(${tr[3]})`
+                        if (tr.label == e.target) {
+                            locImgTemp.style.backgroundImage = `url(../${tr.imgPath})`
                             locImgTemp.style.backgroundSize = "cover"
                             locImgTemp.style.backgroundPosition = "center"
 
-                            mainTitle.textContent = tr[2]
+                            mainTitle.textContent = tr.title
 
-                            tr[6].forEach(trImg => {
+                            tr.displayedContDivs.forEach(trImg => {
                                 conts.append(trImg)
                             })
 
                             // currentID = tr[0]
-                            currentEtitle = tr[1]
+                            currentEtitle = tr.etitle
                         }
                     })
                 })
@@ -225,15 +232,12 @@
 
 
 
-        //////////////POST; send data 
-
-        /////xmlhttprequest and formdata 
-
-        let xml = new XMLHttpRequest()
+        ///////////end data 
 
         /////send loc
         sendLoc.addEventListener("click", async () => {
 
+            console.log(currentCoords, title.value, etitle.value, locImg.files)
             let fd = new FormData()
 
             ///appending the intended data to the formData
@@ -242,21 +246,9 @@
             fd.append("etitle", etitle.value)
             fd.append("image", locImg.files[0])
 
-            /////check if there is a missing value 
-            console.log(currentCoords)
-            console.log(title.value)
-            console.log(etitle.value)
-            console.log(locImg.files[0])
-
-            console.log(fd)
-
-            /////sending xml formdata 
             ///////check if valid (not empty)
-            if (currentCoords != undefined && title.value != "" && etitle.value != "" &&
-                locImg.files != null) {
-                /////xml method; 
-                // xml.open("POST", "/locs")
-                // xml.send(fd)
+            if (currentCoords && title.value && etitle.value && locImg.files) {
+                
 
                 let d = await fetch("/locs", {
                     method: "POST",
@@ -265,12 +257,13 @@
 
                 /////empty the data containers 
                 currentCoords = undefined
-                // title.value = undefined
                 title.value = ""
-                // etitle.value = undefined
                 etitle.value = ""
                 locImg.files = null
                 console.log(locImg.files)
+            }else{
+                console.log("no data inserted")
+                ////make a div and insert this message in it
             }
         })
 
@@ -300,7 +293,6 @@
                 })
             }
         }
-
 
         /////send dist; 
         sendDist.addEventListener("click", async () => {
@@ -341,20 +333,13 @@
                 distAImg.files[0] = null
                 distInfo.value = ""
 
-
-
             }
-
 
             // console.log(distObject)
 
         })
 
 
-        ////for sending rules; 
-        ///make sure (check) the containers if they contain data 
-        ///make an object and insert the data in
-        ///empty the containers value 
 
 
         ///////////////test code 

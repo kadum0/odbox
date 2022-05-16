@@ -88,7 +88,7 @@ app.use("/mode", express.static("./mode"))
 
 
 
-let locImg 
+let locImg
 let locStoring = multer.diskStorage({
     destination: "./public-imgs", 
     filename: async (req, file, cb)=>{
@@ -104,27 +104,23 @@ app.post("/locs", multerLoc.any(), (req, res)=>{
     console.log(".......locs")
     console.log(req.body)
 
-    let it ={}  ///may should be defined at the route
-    ////////////setting object data container
-    it.title = req.body.title
-    it.etitle = req.body.etitle
-    it.path = locImg
-    it.coords = req.body.coords.split(",")
-    // it.conts = []
-    it.dists = []
-
-    console.log(it)
-
-
     ////db
-    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-        let dbb = client.db()    
-        dbb.collection("locs").insertOne(it)
-
-    it={}
-    console.log(it)
-
+    if(req.body.title&&req.body.etitle&&req.body.coords){
+        mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
+            let dbb = client.db()    
+            dbb.collection("locs").insertOne({
+                title: req.body.title, 
+                etitle: req.body.etitle, 
+                locImgPath: locImg,
+                coords: req.body.coords.split(","), 
+                currentConts: [],
+                dists: []
+            })
         })
+        res.sendStatus(200)
+    }else{
+        res.sendStatus(400)
+    }
 })
 
 app.get("/locs", (req, res)=>{
@@ -135,58 +131,12 @@ app.get("/locs", (req, res)=>{
         let result = await dbb.collection("locs").find({}).toArray()
         console.log(result)
         res.json(result)
-})
 // res.json({title: result.title, etitle: result.etitle, mainImg: result.path, coords: result.coords, dists: result.dists})
+
+})
 })
 
 
-// app.get("/locs", (req, res)=>{
-
-//     let obj = {}
-//     mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-//         let dbb = client.db()
-//         ////locs
-//         let results = await dbb.collection("locs").find().toArray()
-
-//         /// ////getting the conts imgs paths related to the intended loc
-//         /// cant access the dir
-//         await results.forEach(e=>{
-//             console.log("/conts/"+e.etitle)
-//             console.log(path.join("\conts", e.etitle))
-
-//             fs.readdir("./public/conts/"+e.etitle, (err, files)=>{
-
-//                 console.log("about to files foreach")
-//                 console.log(files)
-//                 if(err) throw err
-
-//                 if(files != undefined){
-//                 files.forEach(ee=>{
-
-//                     console.log("......the gotten images at the loc........")
-//                     console.log(ee)
-//                     e.conts.push("/conts/"+e.etitle +"/"+ee)
-//                 })
-//                 }
-//             })
-//         })
-
-//         setTimeout(() => {
-            
-//         console.log(results)
-//         console.log("results conts is; ")
-//         console.log(results[0].conts)
-//         res.send(results)
-
-
-//         }, 200);
-//         // console.log(results)
-//         })
-
-// })
-
-
-////conts storing plan
 let contDir ///dir
 let contFilList = [] ///file
 let fil ///file name (path)
@@ -212,13 +162,21 @@ let contStorage = multer.diskStorage({
 let uploadCont = multer({storage: contStorage})
 
 /////conts route; no main db, no get 
-app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
-
-    console.log("post conts")
+////get into the loc and insert it in the locs conts; 
+app.post("/conts", (req, res)=>{
+    console.log(".....conts")
     console.log(req.body)
 })
 
+// app.post("/conts", uploadCont.array("Cont"), (req, res)=>{
+
+//     console.log("post conts")
+//     console.log(req.body)
+// })
+
 //////////////////////Dist
+/// get into the get conts paths then remove it from currentConts and add it to
+/// the itdist 
 
 
 // mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
