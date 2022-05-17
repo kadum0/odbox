@@ -236,11 +236,22 @@
         }
     
         footer {
-            height: 15vh;
+            min-height: 15vh;
+            color: white;
+            padding: 1rem;
             background: #1F2721;
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.5rem;
+            align-items: center;
+            gap: 2rem;
         }
-    
-    
+            
+        footer a{
+            all: unset;
+            cursor: pointer;
+        }
+            
     
     
         .red {
@@ -260,4 +271,31 @@
         }
 
 
+
+
+
+
+        @media all and (max-width: 500px){
+
+            .body{
+                /* display: block; */
+                justify-content: center;
+            }
+            #map{
+                height: 50vh;
+                width: 70vw;
+                /* height: 100%; */
+                /* width: 100%; */
+                margin-left: -4rem;
+            }
+            #profile{
+                width: 90%;
+            }
+            footer{
+                flex-direction: column;
+        
+            }
+        
+        }
+        
 

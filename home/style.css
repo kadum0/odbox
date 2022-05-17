@@ -199,8 +199,20 @@ header {
 }
 
 footer {
-    height: 15vh;
+    min-height: 15vh;
+    color: white;
+    padding: 1rem;
     background: #1F2721;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.5rem;
+    gap: 2rem;
+}
+footer a{
+    all: unset;
+    cursor: pointer;
+
 }
 
 
@@ -243,5 +255,10 @@ footer {
     #profile{
         width: 90%;
     }
+    footer{
+        flex-direction: column;
+
+    }
+
 }
 
