@@ -12,16 +12,7 @@
             /* padding-top: 4rem; */
         }
 
-        #profile img {
-            background-position: center;
-            background-size: cover;
-            height: 80%;
-            width: 100%;
-            /* background: red; */
-        }
 
-
-        /*  */
         #map {
             height: 50vh;
             width: 50vw;
@@ -63,12 +54,17 @@
             background: #19652E;
             overflow-y: hidden;
         }
-
+        #profile img {
+            background-position: center;
+            background-size: cover;
+            height: 80%;
+            width: 100%;
+            /* background: red; */
+        }
         /* main */
         #main {
-            height: 35%;
+            height: 25%;
             background: #29D659;
-
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -77,13 +73,18 @@
         }
 
         #imgCont {
-            height: 130%;
+            height: 100%;
             width: 90%;
             /* height: ; */
             /* width: auto; */
             overflow: hidden;
             /* box-sizing: border-box; */
         }
+        input[type=file] {
+            opacity: .4;
+            /* background: red; */
+        }
+
 
         /* log */
         #dists {
@@ -221,4 +222,26 @@ footer {
     background: rgb(245, 245, 245);
 }
 
+#input{
+    height: 100%;
+    width: 100%;
+}
+
+@media all and (max-width: 500px){
+
+    .body{
+        /* display: block; */
+        justify-content: center;
+    }
+    #map{
+        height: 50vh;
+        width: 70vw;
+        /* height: 100%; */
+        /* width: 100%; */
+        margin-left: -4rem;
+    }
+    #profile{
+        width: 90%;
+    }
+}
 

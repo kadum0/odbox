@@ -110,8 +110,8 @@ app.post("/locs", multerLoc.any(), (req, res)=>{
             let dbb = client.db()    
 
             ////check if used etitle
-            if(await dbb.collection("locs").findOne({etitle: req.body.etitle})){
-                dbb.collection("locs").insertOne({
+            if(!await dbb.collection("locs").findOne({etitle: req.body.etitle})){
+                await dbb.collection("locs").insertOne({
                     title: req.body.title, 
                     etitle: req.body.etitle, 
                     locImgPath: locImg,
@@ -119,11 +119,13 @@ app.post("/locs", multerLoc.any(), (req, res)=>{
                     currentConts: [],
                     dists: []
                 })
+        res.sendStatus(200)
+
             }else{
+                console.log("already used etitle")
                 res.json({err: "already used etitle"})
             }
         })
-        res.sendStatus(200)
     }else{
         res.json({err: "no data sent"})
     }

@@ -56,6 +56,7 @@
 
         /////template dom elements 
         let locImgTemp = document.querySelector("#locImgTemp")
+    locImgTemp.style.background = "red"
         let imgCont = document.querySelector("#imgCont")
         let mainTitle = document.querySelector("#mainTitle")
         let conts = document.querySelector("#conts")
@@ -117,10 +118,11 @@
                 /////coords; lables
                 let label = L.marker(e.coords).addTo(map)
 
-
+                displayedContDivs = []
                 ////conts  
                 console.log(e.currentConts[0])
                 if(e.currentConts[0]){
+
 
                     console.log("current conts ")
 
@@ -167,13 +169,16 @@
 
             }
 
-
             //////dists
             console.log(typeof e.dists)
             console.log(e.dists)
             console.log(Object.values(e.dists))
+
+            displayedDistDivs = []
             
             if(e.dists[0]){
+
+                
                 Object.values(e.dists).forEach(ee=>{
                     console.log(ee)
                     ////make doms 
@@ -219,12 +224,12 @@
 
                     distDiv.append(info)
 
-
                     displayedDistDivs.push(distDiv)
                 })
             }
 
                 /////linked list
+                // tripleLinkedList = []
                 tripleLinkedList.push({
                     id: e.id, 
                     etitle: e.etitle,
@@ -239,30 +244,40 @@
                 ////inserting the created dom on the template; on eventlistener 
                 label.addEventListener("click", (e) => {
 
-                    tripleLinkedList.forEach(tr => {
-                        if (tr.label == e.target) {
-                            locImgTemp.style.backgroundImage = `url(../${tr.imgPath})`
-                            locImgTemp.style.backgroundSize = "cover"
-                            locImgTemp.style.backgroundPosition = "center"
-
-                            mainTitle.textContent = tr.title
-
-                            tr.displayedContDivs.forEach(trImg => {
-                                document.querySelector("#conts").append(trImg)
-                            })
-                            // console.log(tr.displayedDistDivs)
-                            tr.displayedDistDivs.forEach(trImg => {
-                                document.querySelector("#distContainer").append(trImg)
-                            })
-
-
-                            // currentID = tr[0]
-                            currentEtitle = tr.etitle
-                        }
-                    })
+                    checkTrList(e)
                 })
 
             })
+
+            function checkTrList(e){
+
+                tripleLinkedList.forEach(tr => {
+                    if (tr.label == e.target) {
+                        console.log(tr)
+                        locImgTemp.style.backgroundImage = `url(../${tr.imgPath})`
+                        locImgTemp.style.backgroundSize = "cover"
+                        locImgTemp.style.backgroundPosition = "center"
+
+                        mainTitle.textContent = tr.title
+                        document.querySelector("#conts").innerHTML = " "
+
+                        tr.displayedContDivs.forEach(trImg => {
+                            document.querySelector("#conts").append(trImg)
+                        })
+                        document.querySelector("#distContainer").innerHTML =" "
+
+                        // console.log(tr.displayedDistDivs)
+                        tr.displayedDistDivs.forEach(trImg => {
+                            document.querySelector("#distContainer").append(trImg)
+                        })
+
+
+                        // currentID = tr[0]
+                        currentEtitle = tr.etitle
+                    }
+                })
+
+            }
         }
 
 

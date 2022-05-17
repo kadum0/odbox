@@ -19,202 +19,107 @@
 </head>
 
 <body>
-
-    <div id="one">
-
-        <!-- display conts to be confirmed -->
-        <div id="conts">
-            <!-- <div class="con">
-                <img alt="">
-                <button class="accept">accept</button>
-                <button class="refuse">refuse</button>
-            </div>
-            <div class="con">
-                <img alt="">
-                <button class="accept">accept</button>
-                <button class="refuse">refuse</button>
-            </div> -->
+    <header class="green">
+        <div class="logo ">
+            <div class="black"></div>
+            <div class="red"></div>
+            <div class="white"></div>
+            <!-- <div class="green"></div> -->
         </div>
 
-        <div id="input">
+    </header>
+    <div class="step h"></div>
+    <div id="conts"></div>
 
-            <!-- map -->
-            <div id="map"></div>
+    <div class="body ">
 
-            <!-- form button method -->
-            <div id="forms">
-                <!-- adding loc -->
-                <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingLoc"> -->
-                <div class="form" id="addingLocs">
-                    <input type="text" id="title" name="title" placeholder="title">
-                    <input type="text" id="etitle" name="etitle" placeholder="etitle">
-                    <label for="loc">اضافة محطة</label>
-                    <input type="file" id="locImg" name="loc">
-                    <button id="sendLoc">send loc</button>
-                </div>
-                <!-- <input type="submit" id="send"> -->
-                <!-- </form> -->
 
-                <!-- adding per -->
-                <!-- <form action="/perF" method="POST" enctype="multipart/form-data" id="addingPer">
-                    <input type="text" id="title" name="title">
-                    <label for="per">اضافة درة</label>
+        <!-- <div id="one"> -->
 
-                    <input type="file" id="per" name="per">
-                    <input type="submit" id="send">
-                </form> -->
+        <!-- display conts to be confirmed -->
 
-                <!-- adding conts  -->
+        <div class="one">
+            <div id="input">
 
-                <div class="form" id="addingConts">
-                    <label for="contImg">اضافة مشاركة</label>
-                    <input type="file" id="contImg" name="Cont" multiple>
-                    <button id="sendCont">send conts</button>
+                <!-- map -->
+                <div id="mapAndCoords">
+                    <div id="map"></div>
+                    <button id="addingCoords">اضافة موقع</button>
                 </div>
 
-                <div class="form" id="addingDist">
-                    <div>
-                        <label for="distBImg">اضافة صورة قبل</label>
-                        <input type="file" id="distBImg" name="distBImg">
+                <!-- form button method -->
+                <div id="forms">
+                    <!-- adding loc -->
+                    <div class="form" id="addingLocs">
+                        <h2>اضافة محطة</h2>
+                        <input type="text" id="title" name="title" placeholder="title">
+                        <input type="text" id="etitle" name="etitle" placeholder="etitle">
+                        <label for="loc">اضافة صورة للمحطة</label>
+                        <input type="file" id="locImg" name="loc">
+                        <button id="sendLoc">ارسال</button>
                     </div>
 
-                    <div>
-                        <label for="distAImg">اضافة صورة بعد</label>
-                        <input type="file" id="distAImg" name="distAImg">
-                    </div>
-                    <input type="text" id="distInfo" placeholder="معلومات اضافية: المكان, ...">
+                    <!-- adding conts  -->
 
-                    <button id="sendDist"> ارسال</button>
+
+                    <div class="form" id="addingConts">
+                        <h2>اضافة مشاركات</h2>
+                        <label for="contImg">اضافة صور المشاركات</label>
+                        <input type="file" id="contImg" name="Cont" multiple>
+                        <button id="sendCont">ارسال</button>
+                    </div>
+
+                    <div class="form" id="addingDist">
+                        <h2>اضافة توزيع</h2>
+                        <div>
+                            <label for="distBImg">اضافة صورة قبل</label>
+                            <input type="file" id="distBImg" name="distBImg">
+                        </div>
+
+                        <div>
+                            <label for="distAImg">اضافة صورة بعد</label>
+                            <input type="file" id="distAImg" name="distAImg">
+                        </div>
+                        <input type="text" id="distInfo" placeholder="معلومات اضافية: المكان, ...">
+
+                        <button id="sendDist"> ارسال</button>
+                    </div>
                 </div>
 
-                <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingConts">
-                    <input type="text" id="title" name="title">
-                    <label for="cont">اضافة مشاركة</label>
-
-                    <input type="file" id="cont" name="cont">
-                    <input type="submit" id="send">
-                </form> -->
             </div>
 
         </div>
 
         <!-- adding coordinates -->
-        <button id="addingCoords">adding label</button>
+
+        <!-- </div> -->
+        <div id="profile">
+            <div id="main">
+                <h2 id="mainTitle">اسم الجامع</h2>
+                <div id="imgCont">
+                    <img alt="" id="locImgTemp">
+                </div>
+            </div>
+            <div id="dists">
+
+                <div id="distContainer"></div>
+
+            </div>
+
+        </div>
 
     </div>
-    <div id="profile">
-        <div id="main">
-            <h2 id="mainTitle">the mosque name</h2>
-            <div id="imgCont">
-                <img alt="" id="locImgTemp">
 
-            </div>
-        </div>
-        <div id="dists">
+    <div class="step f"></div>
 
-            <div id="distContainer">
+    <footer>
 
-                <div class="distDiv">
-                    <div class="beforeAndAfterImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <div class="contsImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <p>info</p>
-                </div>
-
-                <div class="distDiv">
-                    <div class="beforeAndAfterImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <div class="contsImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <p>info</p>
-                </div>
-                <div class="distDiv">
-                    <div class="beforeAndAfterImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <div class="contsImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <p>info</p>
-                </div>
-                <div class="distDiv">
-                    <div class="beforeAndAfterImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <div class="contsImgs">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img style="background-image:
-                    url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png');
-                    background-size: cover; background-position: center
-                    center;">
-                        <img
-                            style="background-image: url('../2022-05-16T22-13-41.478Zلقطةالشاشة2022-05-15212139.png'); background-size: cover; background-position: center center;">
-                    </div>
-                    <p>info</p>
-                </div>
-
-            </div>
+    </footer>
 
 
 
-        </div>
 
-        <script src="./script.js"></script>
+    <script src="./script.js"></script>
 </body>
 
 </html>
