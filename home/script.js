@@ -77,6 +77,7 @@
 
             //////dists
             console.log(typeof e.dists)
+            displayedDistDivs=[]
             if(e.dists[0]){
                 Object.values(e.dists).forEach(ee=>{
                     console.log(ee)
@@ -148,6 +149,8 @@
                             locImgTemp.style.backgroundPosition = "center"
 
                             mainTitle.textContent = tr.title
+
+                            document.querySelector("#distContainer").innerHTML = ""
 
                             // console.log(tr.displayedDistDivs)
                             tr.displayedDistDivs.forEach(trImg => {
