@@ -1,4 +1,5 @@
 
+        ///////////////////////////////////////////////////////////////////////
         ////setting up 
 
         const map = L.map('map').setView([33.396600, 44.356579], 9); //leaflet basic map
@@ -14,12 +15,8 @@
         }).addTo(map);
 
 
-        // stored data 
-        ////current ID
-        let currentID
 
-
-        ////set icons 
+        ////////defining the objects
         let oldIcon = L.icon({
             iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
             shadowSize: [50, 64], // size of the shadow
@@ -28,9 +25,8 @@
             iconAnchor: [12, 41],
         });
 
-
         ////getting icon; icon is special object not just an image
-        markerIcon = L.icon({
+        let markerIcon = L.icon({
             iconUrl: "https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-2x-red.png?raw=true",
             shadowSize: [50, 64], // size of the shadow
             shadowAnchor: [4, 62], // the same for the shadow
@@ -39,58 +35,165 @@
         });
 
 
+        /////DOM elements 
 
-        //get data and deploy them
-        ////triple linked list
-        //make the dom elements; labels, profile, adding a per conts panel 
-        ///addeventlistener for them; 
-        ///show the related dom element 
-        ///set the current id to the selected element id 
+        ///conts
+        let contImgs = document.querySelector("#contImg")
+        let sendCont = document.querySelector("#sendCont")
 
+        /////template dom elements 
+        let locImgTemp = document.querySelector("#locImgTemp")
+        let imgCont = document.querySelector("#imgCont")
+        let mainTitle = document.querySelector("#mainTitle")
+
+
+
+        /////containers to deploy functionalities
+        let tripleLinkedList = []
+        let m 
+
+        ////containers for sending locs 
+        let currentCoords ////coords 
+        let currentEtitle
+
+        /////container for sending pers 
+        let currentID ////no need 
+        let displayedDistDivs = []
+
+        //////////////////////features 
+
+        /// /getting data and images and insert them; there are some conditions
+        /// to display the current conts if exist; then to add them when making per 
         window.onload = async () => {
-            ///fetching data; 
-            let data = await fetch("/confirmed")
-            let rdata = await data.json()
-            console.log("get routes; ")
-            console.log(rdata)
+            let d = await fetch("/locs")
+            let pd = await d.json() ///or JSON.parse(pd)
+            console.log("get from locs")
+            console.log(pd)
 
-            ///deploy them; store
-            Object.values(rdata.map(e => e.path)).forEach(e => {
+            /////makeing dom 
+            pd.forEach(e => {
+                /////coords; lables
+                let label = L.marker(e.coords).addTo(map)
 
-                if (e.length != 1) { ////routes part
-                    let pathob = L.polyline(e, {
-                        color: "red",
-                    }).addTo(map)
-                    // oldObjects.push(pathId) //dont need old objects
-                    pathob.addEventListener("click", (e) => console.log(e.target))
-                } else { ////labels part 
-                    let label = L.circle(e.path, {
-                        fillColor: '#3388FF',
-                        fillOpacity: 0.8,
-                        radius: 100
-                    }).addTo(map)
-                }
+            //////dists
+            console.log(typeof e.dists)
+            if(e.dists[0]){
+                Object.values(e.dists).forEach(ee=>{
+                    console.log(ee)
+                    ////make doms 
+                    let distDiv = document.createElement("div")
+                    distDiv.classList.add("distDiv")
+
+                    let beforeAndAfterImgs = document.createElement("div")
+                    beforeAndAfterImgs.classList.add("beforeAndAfterImgs")
+                    let beforeImg = document.createElement("img")
+                    beforeImg.style.backgroundImage = `url(../${ee.before})`
+                    beforeImg.style.backgroundSize = "cover"
+                    beforeImg.style.backgroundPosition = "center"
+
+                    let afterImg = document.createElement("img")
+                    afterImg.style.backgroundImage = `url(../${ee.after})`
+                    afterImg.style.backgroundSize = "cover"
+                    afterImg.style.backgroundPosition = "center"
+
+                    beforeAndAfterImgs.append(beforeImg, afterImg)
+
+
+
+                    let info = document.createElement("p")
+                    info.textContent = ee.info
+
+                    distDiv.append(beforeAndAfterImgs)
+
+                    if(ee.conts[0]){
+                        let contsImgs = document.createElement("div")
+                        contsImgs.classList.add("contsImgs")
+
+                        let imgs = []
+                        ee.conts.forEach(eee=>{
+                            let img = document.createElement("img")
+                            img.style.backgroundImage = `url(../${eee})`
+                            img.style.backgroundSize = "cover"
+                            img.style.backgroundPosition = "center"
+                            imgs.push(img)
+                        })
+                        imgs.forEach(eeee=>contsImgs.append(eeee))
+                        distDiv.append(contsImgs)
+                    }
+
+                    distDiv.append(info)
+
+
+                    displayedDistDivs.push(distDiv)
+                })
+            }
+
+                /////linked list
+                tripleLinkedList.push({
+                    id: e.id, 
+                    etitle: e.etitle,
+                    title: e.title, 
+                    imgPath: e.locImgPath,
+                    label: label, 
+                    displayedDistDivs: displayedDistDivs
+                })
+
+                ////inserting the created dom on the template; on eventlistener 
+                label.addEventListener("click", (e) => {
+
+                    tripleLinkedList.forEach(tr => {
+                        if (tr.label == e.target) {
+                            locImgTemp.style.backgroundImage = `url(../${tr.imgPath})`
+                            locImgTemp.style.backgroundSize = "cover"
+                            locImgTemp.style.backgroundPosition = "center"
+
+                            mainTitle.textContent = tr.title
+
+                            // console.log(tr.displayedDistDivs)
+                            tr.displayedDistDivs.forEach(trImg => {
+                                document.querySelector("#distContainer").append(trImg)
+                            })
+
+                            // currentID = tr[0]
+                            currentEtitle = tr.etitle
+                        }
+                    })
+                })
+
             })
         }
 
 
 
 
-        /////// features 
+        ///////////send data 
 
-        /////add per conts images
+        ////send cont
+        sendCont.onclick = async () => {
+
+            let fdCont = new FormData()
+
+            fdCont.append("etitle", currentEtitle)
+            for (let i of contImgs.files) {
+                fdCont.append(`Cont`, i);
+                console.log(i)
+            }
+            console.log(fdCont)
+            console.log(currentEtitle)
 
 
-        ///////sending 
-        let send = document.querySelector("#send")
-        send.addEventListener("click", () => {
+            if (currentEtitle&& contImgs.files[0]){
 
-        })
+                let d = await fetch("/conts", {
+                    method: "POST",
+                    // data: fdCont,
+                    body: fdCont
+                })
+            }
+        }
 
+        ///////////////test code 
 
-
-
-        //////////// test code; 
-        window.onclick = () => {}
-
+        window.onclick = () => {
+        }
 

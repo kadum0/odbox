@@ -67,23 +67,24 @@
                 <!-- adding conts  -->
 
                 <div class="form" id="addingConts">
-                    <!-- <form action="/conts" method="POST"> -->
                     <label for="contImg">اضافة مشاركة</label>
                     <input type="file" id="contImg" name="Cont" multiple>
-                    <!-- <input type="submit"> -->
-                    <!-- </form> -->
-                    <!-- <input type="text" id="titleCont" name="title" placeholder="title"> -->
-                    <!-- <input type="text" id="etitleCont" name="etitle" placeholder="etitle"> -->
                     <button id="sendCont">send conts</button>
                 </div>
 
                 <div class="form" id="addingDist">
-                    <label for="distBImg">اضافة صورة قبل</label>
-                    <input type="file" id="distBImg" name="distBImg">
-                    <label for="distAImg">اضافة صورة بعد</label>
-                    <input type="file" id="distAImg" name="distAImg">
-                    <input type="text" id="distInfo" placeholder="info">
-                    <button id="sendDist"> send dist</button>
+                    <div>
+                        <label for="distBImg">اضافة صورة قبل</label>
+                        <input type="file" id="distBImg" name="distBImg">
+                    </div>
+
+                    <div>
+                        <label for="distAImg">اضافة صورة بعد</label>
+                        <input type="file" id="distAImg" name="distAImg">
+                    </div>
+                    <input type="text" id="distInfo" placeholder="معلومات اضافية: المكان, ...">
+
+                    <button id="sendDist"> ارسال</button>
                 </div>
 
                 <!-- <form action="/locsF" method="POST" enctype="multipart/form-data" id="addingConts">

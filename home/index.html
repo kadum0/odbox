@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>anybox </title>
 
     <!-- leaflet cdn -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
@@ -19,19 +19,59 @@
 </head>
 
 <body>
-    <div id="map"></div>
-    <div class="btns">
-        <!-- <button id="add-mode">اضافة</button> -->
-        <!-- <input type="file" value="اضافة مشاركة"> -->
-        <div>
-            <label for="files" class="btn">اضافة مشاركة</label>
-            <input id="files" type="file" style="opacity: .4;">
+
+    <header class="green">
+        <div class="logo ">
+            <div class="black"></div>
+            <div class="red"></div>
+            <div class="white"></div>
+            <!-- <div class="green"></div> -->
         </div>
-        <button id="send"> ارسال</button>
+    </header>
+    <div class="step h"></div>
+    <div class="body">
 
+
+        <div id="one">
+
+
+            <div id="input">
+                <!-- map -->
+                <div id="map"></div>
+                <div class="form" id="addingConts">
+                    <label for="contImg">اضافة مشاركة</label>
+                    <input type="file" id="contImg" name="Cont" multiple>
+                    <button id="sendCont">ارسال</button>
+                </div>
+
+            </div>
+        </div>
+        <div id="profile">
+            <div id="main">
+                <h2 id="mainTitle">اسم الجامع</h2>
+                <div id="imgCont">
+                    <img alt="" id="locImgTemp">
+
+                </div>
+            </div>
+            <div id="dists">
+
+                <div id="distContainer"></div>
+
+            </div>
+        </div>
     </div>
-    <script src="./script.js"></script>
 
+    <div class="step f"></div>
+    <footer>
+
+    </footer>
+
+
+
+
+
+    <script src="./script.js"></script>
 </body>
 
 </html>
