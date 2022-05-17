@@ -86,6 +86,7 @@
         let perList = []
         let currentID ////no need 
         let displayedContDivs = []
+        let displayedDistDivs = []
         let acceptedConts = []
         let refusedConts = []
 
@@ -116,9 +117,12 @@
                 /////coords; lables
                 let label = L.marker(e.coords).addTo(map)
 
-                /////creating conts imgs and inserting them 
+
+                ////conts  
                 console.log(e.currentConts[0])
-                if(e.currentConts[0] != undefined){
+                if(e.currentConts[0]){
+
+                    console.log("current conts ")
 
                 e.currentConts.forEach(mg=>{
 
@@ -162,6 +166,64 @@
             })
 
             }
+
+
+            //////dists
+            console.log(typeof e.dists)
+            console.log(e.dists)
+            console.log(Object.values(e.dists))
+            
+            if(e.dists[0]){
+                Object.values(e.dists).forEach(ee=>{
+                    console.log(ee)
+                    ////make doms 
+                    let distDiv = document.createElement("div")
+                    distDiv.classList.add("distDiv")
+
+                    let beforeAndAfterImgs = document.createElement("div")
+                    beforeAndAfterImgs.classList.add("beforeAndAfterImgs")
+                    let beforeImg = document.createElement("img")
+                    beforeImg.style.backgroundImage = `url(../${ee.before})`
+                    beforeImg.style.backgroundSize = "cover"
+                    beforeImg.style.backgroundPosition = "center"
+
+                    let afterImg = document.createElement("img")
+                    afterImg.style.backgroundImage = `url(../${ee.after})`
+                    afterImg.style.backgroundSize = "cover"
+                    afterImg.style.backgroundPosition = "center"
+
+                    beforeAndAfterImgs.append(beforeImg, afterImg)
+
+
+
+                    let info = document.createElement("p")
+                    info.textContent = ee.info
+
+                    distDiv.append(beforeAndAfterImgs)
+
+                    if(ee.conts[0]){
+                        let contsImgs = document.createElement("div")
+                        contsImgs.classList.add("contsImgs")
+
+                        let imgs = []
+                        ee.conts.forEach(eee=>{
+                            let img = document.createElement("img")
+                            img.style.backgroundImage = `url(../${eee})`
+                            img.style.backgroundSize = "cover"
+                            img.style.backgroundPosition = "center"
+                            imgs.push(img)
+                        })
+                        imgs.forEach(eeee=>contsImgs.append(eeee))
+                        distDiv.append(contsImgs)
+                    }
+
+                    distDiv.append(info)
+
+
+                    displayedDistDivs.push(distDiv)
+                })
+            }
+
                 /////linked list
                 tripleLinkedList.push({
                     id: e.id, 
@@ -170,7 +232,8 @@
                     imgPath: e.locImgPath,
                     label: label, 
                     perList: perList,
-                    displayedContDivs: displayedContDivs
+                    displayedContDivs: displayedContDivs,
+                    displayedDistDivs: displayedDistDivs
                 })
 
                 ////inserting the created dom on the template; on eventlistener 
@@ -185,8 +248,13 @@
                             mainTitle.textContent = tr.title
 
                             tr.displayedContDivs.forEach(trImg => {
-                                conts.append(trImg)
+                                document.querySelector("#conts").append(trImg)
                             })
+                            // console.log(tr.displayedDistDivs)
+                            tr.displayedDistDivs.forEach(trImg => {
+                                document.querySelector("#distContainer").append(trImg)
+                            })
+
 
                             // currentID = tr[0]
                             currentEtitle = tr.etitle

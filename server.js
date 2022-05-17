@@ -193,22 +193,25 @@ let multerDist = multer({storage: distStorage})
 app.post("/dist",(req, res, next)=>{before = ""; after = ""; next()}, multerDist.any(), (req, res)=>{
     console.log("...............dist")
     console.log(req.body)
-    if(req.body.acceptedConts[0]&&req.body.refusedConts&&req.body.info&&req.body.etitle&&after&&before){
+    if((req.body.acceptedConts||req.body.refusedConts)&&req.body.refusedConts&&req.body.info&&req.body.etitle&&after&&before){
 
-        console.log(typeof req.body.acceptedConts)
     acceptedConts = req.body.acceptedConts.split(",")
-    refusedConts = req.body.acceptedConts.split(",")
+    refusedConts = req.body.refusedConts.split(",")
 
     mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
         let dbb = client.db()
         ////remove accepted 
-        acceptedConts.forEach(async e=>{
-            await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
-        })
-        ////remove refused
-        refusedConts.forEach(async e=>{
-            await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
-        })
+        if(acceptedConts[0]){
+            acceptedConts.forEach(async e=>{
+                await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
+            })
+        }
+        if(refusedConts[0]){
+            ////remove refused
+            refusedConts.forEach(async e=>{
+                await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
+            })
+        }
 
         let addDIst = await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$push: {dists: {
             before: before, 
@@ -231,168 +234,6 @@ app.post("/dist",(req, res, next)=>{before = ""; after = ""; next()}, multerDist
 })
 
 
-
-
-
-
-let newDistPath
-let distSorage = multer.diskStorage({
-
-    destination: (req, file, cb)=>{
-
-        console.log("........destination.........")
-        ///go to locs; find the right dir; based on the etitle in the req.body
-        ///make before img and after img from files names
-        ///make a cont folder and tralsate the imgs paths in body.path
-
-        fs.readdir("./public/locs;imgs/"+req.body.etitle, async (err, file)=>{
-            if(err)throw err
-            let distDir = "dist-" + new Date().getFullYear() +"-" + new Date().getDate() +"-" + new Date().getDay()+"-" + new Date().getHours()+"-" + new Date().getMinutes()
-            // let distDdir = distDir.replace(" ", "-")
-            console.log(distDir)
-            newDistPath = "./public/locs;imgs/"+req.body.etitle+"/" + distDir
-            await fs.mkdir(newDistPath ,()=> cb(null, newDistPath))
-            // cb(null, distDir)
-        })
-
-        console.log(req.body.etitle)
-        console.log(file)
-
-        // cb(null, './public/distImgs')
-
-        ////go to locs; make a dist cont imgs folder with the dist number; tranlate to it the accepted imgs
-
-        ///get the imgs link (path); then insert it in a ?? (list)
-
-
-        // contDir = `./public/conts/${req.body.etitle}`
-        // // contDirList.push(contDir)
-        // fs.exists(contDir, exist => {
-        //     if (!exist) {
-        //         return fs.mkdir(contDir, error => cb(error, contDir))
-        //     }
-        //     return cb(null, contDir)
-        //     })
-    },
-    filename: (req, file, cb)=>{
-
-        console.log(".......file name...........")
-
-        let fileName = file.fieldname+ "."+ file.originalname.split(".")[1]
-
-        cb(null, fileName)
-
-        console.log("/locs;imgs/"+req.body.etitle +fileName)
-
-        ///get the intended doc and make an object to insert in it 
-        // let d = await dbb.collection("locs").updateOne({etitle: req.body.etitle}, {$set: {dists: newDist}})
-        // let d = await dbb.collection("locs").updateOne({etitle:
-        // req.body.etitle}, { $set: { dists :[{file.fieldname: }] } })  /// no
-        // update required but need to make an object and insert it at the dists
-        // array
-        
-        // mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-        // let dbb = client.db()
-        // })
-
-
-
-        // fil = new Date().toISOString().replace(/:/g, '-') +file.originalname
-        // contFilList.push("./conts/"+req.body.etitle+fil)
-        // cb(null, fil)
-    }
-})
-let uploadDist = multer({storage: distSorage})
-
-////dist post
-app.post("/distto", uploadDist.any(), async (req, res)=>{
-
-    console.log(".......post dist........")
-
-    ///////make object 
-    let distObject ={}
-    distObject.conts = []
-
-    await fs.readdir(newDistPath, (err, files)=>{
-        files.forEach(e=>{
-
-            if(e.split(".")[0] == "A"){
-                distObject.A = (newDistPath+"/"+e).replace("./public", "")
-            }else{
-                distObject.B = (newDistPath + "/"+ e).replace("./public", "")
-            }
-        // distObject.conts.push(newDistPath+"/"+e)
-        })
-    })
-
-    ////making conts dir 
-    await fs.mkdir(newDistPath +"/conts", ()=>console.log("created conts dir"))
-
-
-    req.body.acceptedConts.split(",").forEach(async e=>{
-
-        console.log(".......old paths.......")
-        console.log(e)
-
-
-        let oldP = "./public"+ e
-        let ee = e.split("/")[e.split("/").length -1]
-        // console.log(ee)
-        let newP = newDistPath + "/conts/" + ee
-
-        distObject.conts.push((newDistPath+"/conts/"+ee).replace("./public", ""))
-
-        await fs.rename(oldP, newP, function (err) {
-            if (err) throw err
-            console.log('Successfully renamed - AKA moved!')
-
-            console.log(distObject)
-        })
-    })
-
-    distObject.info = req.body.info
-    distObject.date = req.body.date
-
-
-
-    // fs.readdir()
-
-
-    console.log(distObject)
-
-    /////////mongodb side; 
-    
-    mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
-    let dbb = client.db()
-        dbb.collection("locs").updateOne({etitle: req.body.etitle}, {$set:{dists: distObject}})
-    })
-
-
-    
-    
-    // fs.readdir(newDistPath, (err, files)=>{
-
-    // })
-
-    // console.log(req.body)
-    // console.log(req.body.acceptedConts.split(","))
-    // console.log(req.body.refusedConts.split(","))
-
-    ////get into the intended dist path; get the a and b 
-    ////change the path of the accepted conts 
-    /// make an object to put the path of a, b and the rest changed conts in
-    // form of array also the info and date 
-
-
-
-    ///take a look on the loc folder; based on the body etitle; and take the
-    ///imgs paths; b img, a img, conts imgs 
-    ///make a post to the db; find based on the etitle; to insert on the dists array; 
-    ///
-
-})
-
-
 /////////////////////test code 
 
 ////////deleting all 
@@ -402,7 +243,8 @@ app.post("/distto", uploadDist.any(), async (req, res)=>{
     //     })
 
 
-
+    /// //check if valid data;
+    /// if(req.body.?&&req.body.??&&req.body.???[){...res.sendStatus(200)}else{res.json({err:"no data sent"})}
 
 
 ///////establishing
