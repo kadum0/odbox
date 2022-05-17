@@ -195,7 +195,7 @@ let multerDist = multer({storage: distStorage})
 app.post("/dist",(req, res, next)=>{before = ""; after = ""; next()}, multerDist.any(), (req, res)=>{
     console.log("...............dist")
     console.log(req.body)
-    if((req.body.acceptedConts||req.body.refusedConts)&&req.body.refusedConts&&req.body.info&&req.body.etitle&&after&&before){
+    if(req.body.info&&req.body.etitle&&after&&before){
 
     acceptedConts = req.body.acceptedConts.split(",")
     refusedConts = req.body.refusedConts.split(",")
@@ -204,12 +204,14 @@ app.post("/dist",(req, res, next)=>{before = ""; after = ""; next()}, multerDist
         let dbb = client.db()
         ////remove accepted 
         if(acceptedConts[0]){
+            console.log("............accepted")
             acceptedConts.forEach(async e=>{
                 await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
             })
         }
         if(refusedConts[0]){
             ////remove refused
+            console.log(".....refused")
             refusedConts.forEach(async e=>{
                 await dbb.collection("locs").findOneAndUpdate({etitle: req.body.etitle}, {$pull: {currentConts: e}})
             })
