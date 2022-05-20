@@ -14,6 +14,28 @@
             accessToken: apiKey
         }).addTo(map);
 
+        L.Control.geocoder().addTo(map);
+
+
+
+        // L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        //     subdomains: ['a', 'b', 'c']
+        //   }).addTo(map); //Creates the attribution box at the top bottom right of map.
+    
+    
+
+        // const provider = new window.GeoSearch.OpenStreetMapProvider();
+        // const search = new GeoSearch.GeoSearchControl({
+        // provider: provider,
+        // style: 'bar',
+        // updateMap: true,
+        // autoClose: true,
+        // }); // Include the search box with usefull params. Autoclose and updateMap in my case. Provider is a compulsory parameter.
+    
+        // L.marker([51.0, -0.09]).addTo(map).bindPopup('A pretty CSS3 popup.<br> Easily customizable.'); //Creates a marker at [latitude, longitude] coordinates.
+    
+    
 
 
         ////////defining the objects

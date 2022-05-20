@@ -14,6 +14,9 @@
             accessToken: apiKey
         }).addTo(map);
 
+        // search box
+        L.Control.geocoder().addTo(map);
+
 
 
         ////////defining the objects
