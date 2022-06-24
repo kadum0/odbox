@@ -38,18 +38,28 @@
     
 
 
-        ////////defining the objects
+        // //////defining the objects
+        // let oldIcon = L.icon({
+        //     iconUrl: "./marker-icon-2x-green.png",
+        //     shadowSize: [50, 64], // size of the shadow
+        //     shadowAnchor: [4, 62], // the same for the shadow
+        //     iconSize: [25, 41],
+        //     iconAnchor: [12, 41],
+        // });
+
+// marker-icon.png
+
         let oldIcon = L.icon({
-            iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+            iconUrl: "./marker-icon.png",
             shadowSize: [50, 64], // size of the shadow
             shadowAnchor: [4, 62], // the same for the shadow
             iconSize: [25, 41],
             iconAnchor: [12, 41],
-        });
+        })
 
         ////getting icon; icon is special object not just an image
         let markerIcon = L.icon({
-            iconUrl: "https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-2x-red.png?raw=true",
+            iconUrl: "./marker-icon-2x-red.png",
             shadowSize: [50, 64], // size of the shadow
             shadowAnchor: [4, 62], // the same for the shadow
             iconSize: [25, 41],
@@ -164,6 +174,9 @@
                 ////inserting the created dom on the template; on eventlistener 
                 label.addEventListener("click", (e) => {
 
+                    tripleLinkedList.forEach(e=>{e.label.setIcon(oldIcon)})
+                    e.target.setIcon(markerIcon)
+
                     tripleLinkedList.forEach(tr => {
                         if (tr.label == e.target) {
                             locImgTemp.style.backgroundImage = `url(../${tr.imgPath})`
@@ -186,8 +199,91 @@
                 })
 
             })
+
+
+                ////get the routes 
+        ///fetching data; 
+        let routes= await fetch("/confirmed")
+        pathList = await routes.json()
+        document.querySelector("#displaylines").removeAttribute("disabled")
+        console.log(pathList)
+
         }
 
+
+        let pathObjects = []
+        let pathList 
+        
+        function displayLines (pd){
+            console.log("get routes; ", pd)
+            
+            Object.values(pd).forEach(e=>console.log(e.path))
+        
+            ///deploy them; store
+            Object.values(pd).forEach(e => {
+        
+                let obje 
+        
+                if(typeof e.path[0]!="number"){
+        
+                    console.log(e.path)
+                    obje = L.polyline(e.path, {
+                        // color: "red",
+                    }).addTo(map)
+                    // oldObjects.push(pathId) //dont need old objects
+                    // pathob.addEventListener("click", (e) => console.log(e.target))
+                } else { ////labels part 
+                    console.log("....label....")
+        
+                    obje = L.circle(e.path, {
+                        fillColor: '#3388FF',
+                        fillOpacity: 0.8,
+                        radius: 100
+                    }).addTo(map)
+                }
+        
+                pathObjects.push(obje)
+                obje.addEventListener("mouseover", (e)=>{
+                    pathObjects.forEach(e=>{e.setStyle({color: "#3388FF", fillColor: "#3388FF"})})
+                    let i = e.target
+                    map.removeLayer(e.target)
+                    i.addTo(map)
+                    pathObjects.push(i)
+                    i.setStyle({color:"rgb(223, 39, 39)", fillColor: "rgb(223, 39, 39)"})
+                })
+                obje.addEventListener("click", (e)=>{
+                    pathObjects.forEach(e=>{e.setStyle({color: "#3388FF", fillColor: "#3388FF"})})
+                    let i = e.target
+                    map.removeLayer(e.target)
+                    i.addTo(map)
+                    pathObjects.push(i)
+                    i.setStyle({color:"rgb(223, 39, 39)", fillColor: "rgb(223, 39, 39)"})
+                })
+            })
+        }
+        function hideLines(pd){
+            pd.forEach(e=>{
+                map.removeLayer(e)
+            })
+        }
+                
+
+//////button that shows the lines 
+document.querySelector("#displaylines").addEventListener("click", (e)=>{
+    console.log(e.target.classList)
+
+    e.target.classList.toggle("add")
+    if(e.target.classList.contains("add")){
+        displayLines(pathList)
+        // e.target.parentElement.append(suggetstMakeLinesBtn)
+        document.querySelector(".suggest").style.display = "block"
+    }else{
+        hideLines(pathObjects)
+        // e.target.parentElement.lastElementChild.remove()
+        document.querySelector(".suggest").style.display = "none"
+
+    }
+})
 
 
 

@@ -238,12 +238,26 @@ app.post("/dist",(req, res, next)=>{before = ""; after = ""; next()}, multerDist
 })
 
 
+
+//////////routes 
+
+app.get("/confirmed", (req, res)=>{
+    console.log(".......get confirmed lines.....")
+
+    mongodb.connect(process.env.MONGOKEY2, async (err, client)=>{
+        let dbb = client.db()
+    let results = await dbb.collection("confirmed").find().toArray()
+    res.send(results)
+    console.log(results)
+    })
+})
+
+
+
 /////////////////////test code 
 
-////////deleting all 
     // mongodb.connect(process.env.MONGOKEY, async (err, client)=>{
     //     let dbb = client.db()    
-    //     dbb.collection("locs").deleteMany()
     //     })
 
 
@@ -252,5 +266,7 @@ app.post("/dist",(req, res, next)=>{before = ""; after = ""; next()}, multerDist
 
 
 ///////establishing
-app.listen(process.env.PORT || 3000, ()=>console.log("listennig ..."))
+app.listen(process.env.PORT || 3000, ()=>console.log("listennig 3000"))
+
+
 
