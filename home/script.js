@@ -274,11 +274,15 @@ document.querySelector("#displaylines").addEventListener("click", (e)=>{
 
     e.target.classList.toggle("add")
     if(e.target.classList.contains("add")){
+        e.target.textContent = "اخفاء مسارات النقل العام"
+        e.target.style.background = "#ff2a2a"
         displayLines(pathList)
         // e.target.parentElement.append(suggetstMakeLinesBtn)
-        document.querySelector(".suggest").style.display = "block"
+        document.querySelector(".suggest").style.display = "inline-block"
     }else{
         hideLines(pathObjects)
+        e.target.textContent = "اظهار مسارات النقل العام"
+        e.target.style.background = "#27f060"
         // e.target.parentElement.lastElementChild.remove()
         document.querySelector(".suggest").style.display = "none"
 
