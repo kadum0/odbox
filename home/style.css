@@ -12,6 +12,7 @@
             justify-content: center;
             align-items: center;
             padding: .5rem 2rem;
+            direction: ltr;
         }
         
         .logo div {
@@ -239,7 +240,7 @@ main {
         .features img{
             height: 6rem;
         }
-        #info div, .features {
+        #info div, .features, .additionalInfo {
             min-width: 20vw;
             max-width: 80vw;
             /* height: 40vh; */
@@ -279,6 +280,9 @@ main {
         }
         .contact img{
             height: 2rem;
+        }
+        .additionalInfo{
+            font-size: 1.4rem;
         }
         
         
