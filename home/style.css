@@ -28,6 +28,9 @@
             height: 4rem;
             width: 4rem;
         }
+        header button{
+            padding: 1rem;
+        }
         
         
 

@@ -321,7 +321,7 @@ document.querySelector("#displaylines").addEventListener("click", (e)=>{
             if(e.target.textContent == "en"){
 
 
-                document.querySelector("#projectName").textContent = "anyBox"
+                // document.querySelector("#projectName").textContent = "anyBox"
                 document.querySelector("#profile").innerHTML = `
                 <div id="main">
                 <h2 id="mainTitle">mosque name</h2>
@@ -382,7 +382,7 @@ console.log("change the text into ar")
                 e.target.textContent = "ar"
             }else{
 
-                document.querySelector("#projectName").textContent = "صندوك"
+                // document.querySelector("#projectName").textContent = "صندوك"
                 document.querySelector("#profile").innerHTML = `
                 <div id="main">
                 <h2 id="mainTitle">اسم الجامع</h2>
