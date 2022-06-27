@@ -317,6 +317,139 @@ document.querySelector("#displaylines").addEventListener("click", (e)=>{
             }
         }
 
+        document.querySelector("#en").addEventListener("click", (e) => {
+            if(e.target.textContent == "en"){
+
+
+                document.querySelector("#projectName").textContent = "anyBox"
+                document.querySelector("#profile").innerHTML = `
+                <div id="main">
+                <h2 id="mainTitle">mosque name</h2>
+                <div id="imgCont">
+                    <img alt="" id="locImgTemp">
+                </div>
+            </div>
+            <h4 id="dis">distro log </h4>
+            <div id="dists">
+                <div id="distContainer"></div>
+            </div>
+`
+            document.querySelector("#addingConts").innerHTML = `
+            <label for="contImg">add contribute img</label>
+            <input type="file" id="contImg" name="Cont" multiple>
+            <button id="sendCont">send</button>
+    `
+            document.querySelector("#displayLines").innerHTML = `
+            <button id="displaylines" style="font-size: 1.5rem;" disabled="true">display public transportation lines
+            </button>
+            <a href="https://coaster-route-polyline.herokuapp.com" target="_blank" class="suggest">add lines</a>
+            `
+
+            document.querySelector("footer").innerHTML = `
+            <div class="features">
+            <span class="black"></span>
+            <h2>website features; goal and use </h2>
+            <div> <img src="./f1.1.png" alt=""> <img src="./marker-icon.png" alt="">display the material donating centers</div>
+            <div> <img src="./f2.bcut.png" alt=""> display the distro log </div>
+            <div> <img src="./f3.2editd.png" alt=""> send material donation image </div>
+        </div>
+        <div id="info">
+            <div class="achievements">
+                <span class="green"></span>
+                <h2>project results</h2>
+                <li>material donating centers: <b>4</b></li>
+                <li>distros: <b>20</b></li>
+                <li>contributors: <b>20</b></li>
+            </div>
+            <div class="contact">
+                <span class="red"></span>
+                <h2>contact us; to get the admin permission</h2>
+                <a href="https://www.instagram.com/kadum_0/"><img
+                        src="./instagram-round-icon-vector-instagram-round-multicolor-icon-white-background-134391805.jpg"
+                        alt=""></a>
+                <a href="t.me/kadum0">
+                    <img src="./telegram-logo.png" alt="">
+                </a>
+                <p>email; kadom1230@gmail.com</p>
+            </div>
+        </div>
+        <div class="additionalInfo">
+        <h2>project goal;</h2>
+        <li>the pins on the map are material donating centers to collect the donated materials then distribute and give them to the needed families and society layers; that the process get documented via images for the intended objects before and after distributing them; also with the images sent by users while sending them to the donating center (location)</li>
+        </div>
+            `
+console.log("change the text into ar")
+                e.target.textContent = "ar"
+            }else{
+
+                document.querySelector("#projectName").textContent = "صندوك"
+                document.querySelector("#profile").innerHTML = `
+                <div id="main">
+                <h2 id="mainTitle">اسم الجامع</h2>
+                <div id="imgCont">
+                    <img alt="" id="locImgTemp">
+                </div>
+            </div>
+            <h4 id="dis">عمليات التوزيع </h4>
+            <div id="dists">
+                <div id="distContainer"></div>
+            </div>
+`
+            document.querySelector("#addingConts").innerHTML = `
+            <label for="contImg">اضافة مشاركة</label>
+            <input type="file" id="contImg" name="Cont" multiple>
+            <button id="sendCont">ارسال</button>
+        `
+            document.querySelector("#displayLines").innerHTML = `
+            <button id="displaylines" style="font-size: 1.5rem;" disabled="true">اظهار المسارات النقل العام (كيات و كوسترات)
+            </button>
+            <a href="https://coaster-route-polyline.herokuapp.com" target="_blank" class="suggest">اضافة مسارات</a>
+                `
+
+            document.querySelector("footer").innerHTML = `
+            <div class="features">
+            <span class="black"></span>
+            <h2>مميزات الموقع: الغرض و الاستخدام </h2>
+            <div> <img src="./f1.1.png" alt=""> <img src="./marker-icon.png" alt="">اظهار
+                مراكز جمع تبرعات الاغراض</div>
+            <div> <img src="./f2.bcut.png" alt=""> اظهار عمليات توزيع الاغراض للمركز </div>
+            <div> <img src="./f3.2editd.png" alt=""> ارسال
+                صور للتبرعات </div>
+        </div>
+        <div id="info">
+            <div class="achievements">
+                <span class="green"></span>
+                <h2>نتائج المشروع</h2>
+                <li>عدد المراكز: <b>4</b></li>
+                <li>عمليات التوزيع: <b>20</b></li>
+                <li>عدد المساهمين: <b>20</b></li>
+                <img src="./284807325_340145658273227_1050030653915922194_n.jpg" alt="">
+            </div>
+            <div class="contact">
+                <span class="red"></span>
+                <h2>تواصل معنا</h2>
+                <a href="https://www.instagram.com/kadum_0/"><img
+                        src="./instagram-round-icon-vector-instagram-round-multicolor-icon-white-background-134391805.jpg"
+                        alt=""></a>
+                <a href="t.me/kadum0">
+                    <img src="./telegram-logo.png" alt="">
+                </a>
+                <p>email; kadom1230@gmail.com</p>
+            </div>
+        </div>
+        <div class="additionalInfo">
+            <li> العلامات على الخارطة هي مراكز جمع تبرعات الاغراض, و التي عند
+                امتلائها
+                سيتم توزيعها على العوائل المحتاجة لها, و يتم توثيق تلك العملية بصور
+                قبل و بعد و مشاركات المستخدمين
+            </li>
+        </div>
+            `
+
+                e.target.textContent = "en"
+            }
+        })
+
         ///////////////test code 
 
         window.onclick = () => {
