@@ -376,6 +376,13 @@ document.querySelector("#displaylines").addEventListener("click", (e)=>{
         <div class="additionalInfo">
         <h2>project goal;</h2>
         <li>the pins on the map are material donating centers to collect the donated materials then distribute and give them to the needed families and society layers; that the process get documented via images for the intended objects before and after distributing them; also with the images sent by users while sending them to the donating center (location)</li>
+        <li class="redli">
+        This site is a platform: means based on two parties: users and admins,
+        The user sends the data and the admin has the authority to authenticate or delete
+        that Data, the admin is often a volunteer team, has a relationship or experience with the service
+        Who is coming to settle it on the site: Any volunteer team that wants to register as an admin can contact us to get it             
+   </li>
+
         </div>
             `
 console.log("change the text into ar")
@@ -443,6 +450,14 @@ console.log("change the text into ar")
                 سيتم توزيعها على العوائل المحتاجة لها, و يتم توثيق تلك العملية بصور
                 قبل و بعد و مشاركات المستخدمين
             </li>
+            <li class="redli">
+            الموقع هاذ هو منصة: يعني بي طرفين: المستخدمين و الادمنز,
+            المستخدم يرسل البيانات و الادمن عندة صلاحية يوثق او حذف
+            البيانات, الادمن غالبا يكون فريق تطوعي الة علاقة او خبرة بالخدمة
+            اللي جاي يسويها الموقع: فأي فريق تطوعي يريد يسجل كأدمن يكدر
+            يتواصل ويانة للحصول
+        </li>
+        
         </div>
             `
 
